@@ -2,6 +2,7 @@ package app.organicmaps.widget.placepage;
 
 import android.content.Context;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -42,6 +43,7 @@ import app.organicmaps.routing.RoutingController;
 import app.organicmaps.util.SharingUtils;
 import app.organicmaps.util.StringUtils;
 import app.organicmaps.util.UiUtils;
+import app.organicmaps.util.Utils;
 import app.organicmaps.util.concurrency.UiThread;
 import app.organicmaps.widget.ArrowView;
 import app.organicmaps.widget.placepage.sections.PlacePageBookmarkFragment;
@@ -108,6 +110,7 @@ public class PlacePageView extends Fragment implements View.OnClickListener,
   private View mEditPlace;
   private View mAddOrganisation;
   private View mAddPlace;
+  private View mOpenIn;
   private View mEditTopSpace;
 
   // Data
@@ -249,6 +252,8 @@ public class PlacePageView extends Fragment implements View.OnClickListener,
     mAddOrganisation.setOnClickListener(this);
     mAddPlace = mFrame.findViewById(R.id.ll__place_add);
     mAddPlace.setOnClickListener(this);
+    mOpenIn = mFrame.findViewById(R.id.ll__open_in);
+    mOpenIn.setOnClickListener(this);
     mEditTopSpace = mFrame.findViewById(R.id.edit_top_space);
     latlon.setOnLongClickListener(this);
     address.setOnLongClickListener(this);
@@ -526,6 +531,12 @@ public class PlacePageView extends Fragment implements View.OnClickListener,
                     .putInt(PREF_COORDINATES_FORMAT, mCoordsFormat.getId())
                     .apply();
       refreshLatLon();
+    }
+    else if (id == R.id.ll__open_in)
+    {
+      final String uri = Framework.nativeGetGeoUri(mMapObject.getLat(), mMapObject.getLon(), mMapObject.getScale(),
+          mMapObject.getName());
+      Utils.openUri(requireContext(), Uri.parse(uri));
     }
     else if (id == R.id.direction_frame)
       showBigDirection();
