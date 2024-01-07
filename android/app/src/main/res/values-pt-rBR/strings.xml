@@ -427,6 +427,8 @@
 	<string name="forgot_password">Esqueceu sua senha?</string>
 	<string name="logout">Encerrar sessão</string>
 	<string name="edit_place">Editar o local</string>
+	<!-- A button in place page -->
+	<string name="open_in_another_app">Abrir em outro aplicativo</string>
 	<string name="add_language">Adicionar um idioma</string>
 	<string name="street">Rua</string>
 	<!-- Editable House Number text field (in address block). -->
@@ -763,7 +765,6 @@
 	<string name="type.aeroway.taxiway">Pista de rolagem</string>
 	<string name="type.aeroway.terminal">Aerogare de passageiros</string>
 	<string name="type.amenity">Amenidades</string>
-	<string name="type.amenity.arts_centre">Centros de arte</string>
 	<string name="type.amenity.atm">Caixa eletrônico</string>
 	<string name="type.amenity.bank">Banco</string>
 	<string name="type.amenity.bar">Drinqueria</string>
