@@ -164,6 +164,12 @@ final class BMCViewController: MWMViewController {
 
     present(actionSheet, animated: true, completion: nil)
   }
+
+  private func openRecentlyDeleted() {
+    let recentlyDeletedController = RecentlyDeletedCategoriesViewController()
+    MapViewController.topViewController().navigationController?.pushViewController(recentlyDeletedController,
+                                                                                   animated: true)
+  }
 }
 
 extension BMCViewController: BMCView {
@@ -275,6 +281,7 @@ extension BMCViewController: UITableViewDelegate {
       case .create: createNewCategory()
       case .exportAll: shareAllCategories(anchor: tableView.cellForRow(at: indexPath))
       case .import: showImportDialog()
+      case .recentlyDeleted: openRecentlyDeleted()
       }
     default:
       assertionFailure()

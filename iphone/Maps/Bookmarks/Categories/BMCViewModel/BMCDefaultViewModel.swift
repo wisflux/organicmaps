@@ -37,6 +37,7 @@ final class BMCDefaultViewModel: NSObject {
     if !manager.areAllCategoriesEmpty() {
       actions.append(.exportAll)
     }
+    actions = [.recentlyDeleted]
   }
 
   private func setNotifications() {
