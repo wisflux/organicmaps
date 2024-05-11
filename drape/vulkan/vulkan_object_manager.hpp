@@ -110,7 +110,12 @@ private:
   std::array<std::thread::id, ThreadType::Count> m_renderers = {};
   std::array<std::array<VulkanObjectArray, kMaxInflightFrames>, ThreadType::Count> m_queuesToDestroy = {};
 
-  std::vector<VkDescriptorPool> m_descriptorPools;
+  struct DescriptorPool
+  {
+    VkDescriptorPool m_pool;
+    uint32_t m_availableSetsCount = 0;
+  };
+  std::vector<DescriptorPool> m_descriptorPools;
 
   std::array<DescriptorSetGroupArray, kMaxInflightFrames> m_descriptorsToDestroy;
 
