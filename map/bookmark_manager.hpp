@@ -299,6 +299,7 @@ public:
   /// Scans and loads all kml files with bookmarks.
   void LoadBookmarks();
   void LoadBookmark(std::string const & filePath, bool isTemporaryFile);
+  void ReloadBookmark(std::string const & filePath);
 
   /// Uses the same file name from which was loaded, or
   /// creates unique file name on first save and uses it every time.
@@ -608,6 +609,7 @@ private:
   void NotifyAboutFinishAsyncLoading(KMLDataCollectionPtr && collection);
   void NotifyAboutFile(bool success, std::string const & filePath, bool isTemporaryFile);
   void LoadBookmarkRoutine(std::string const & filePath, bool isTemporaryFile);
+  void ReloadBookmarkRoutine(std::string const & filePath);
 
   using BookmarksChecker = std::function<bool(kml::FileData const &)>;
   KMLDataCollectionPtr LoadBookmarks(std::string const & dir, std::string_view ext,
@@ -758,12 +760,13 @@ private:
   bool m_asyncLoadingInProgress = false;
   struct BookmarkLoaderInfo
   {
-    BookmarkLoaderInfo(std::string const & filename, bool isTemporaryFile)
-      : m_filename(filename), m_isTemporaryFile(isTemporaryFile)
+    BookmarkLoaderInfo(std::string const & filename, bool isTemporaryFile, bool isReloading)
+      : m_filename(filename), m_isTemporaryFile(isTemporaryFile), m_isReloading(isReloading)
     {}
 
     std::string m_filename;
     bool m_isTemporaryFile = false;
+    bool m_isReloading = false;
   };
   std::list<BookmarkLoaderInfo> m_bookmarkLoadingQueue;
 

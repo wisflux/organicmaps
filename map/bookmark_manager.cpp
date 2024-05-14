@@ -1975,12 +1975,28 @@ void BookmarkManager::LoadBookmark(std::string const & filePath, bool isTemporar
   // Defer bookmark loading in case of another asynchronous process.
   if (!m_loadBookmarksFinished || m_asyncLoadingInProgress)
   {
-    m_bookmarkLoadingQueue.emplace_back(filePath, isTemporaryFile);
+    m_bookmarkLoadingQueue.emplace_back(filePath, isTemporaryFile, false);
     return;
   }
 
   NotifyAboutStartAsyncLoading();
   LoadBookmarkRoutine(filePath, isTemporaryFile);
+}
+
+void BookmarkManager::ReloadBookmark(std::string const & filePath)
+{
+  CHECK_THREAD_CHECKER(m_threadChecker, ());
+  auto const groupId = GetCategoryByFileName(filePath);
+  if (groupId)
+    DeleteBmCategory(groupId, false);
+
+  if (!m_loadBookmarksFinished || m_asyncLoadingInProgress)
+  {
+    m_bookmarkLoadingQueue.emplace_back(filePath, false, true);
+    return;
+  }
+  NotifyAboutStartAsyncLoading();
+  ReloadBookmarkRoutine(filePath);
 }
 
 void BookmarkManager::LoadBookmarkRoutine(std::string const & filePath, bool isTemporaryFile)
@@ -2034,6 +2050,36 @@ void BookmarkManager::LoadBookmarkRoutine(std::string const & filePath, bool isT
   });
 }
 
+void BookmarkManager::ReloadBookmarkRoutine(std::string const & filePath)
+{
+  GetPlatform().RunTask(Platform::Thread::File, [this, filePath]()
+  {
+    if (m_needTeardown)
+      return;
+
+    auto const ext = GetLowercaseFileExt(filePath);
+    std::unique_ptr<kml::FileData> kmlData;
+    if (ext == kKmlExtension)
+      kmlData = LoadKmlFile(filePath, KmlFileType::Text);
+    else if (ext == kGpxExtension)
+      kmlData = LoadKmlFile(filePath, KmlFileType::Gpx);
+    else
+      ASSERT(false, ("Unsupported bookmarks extension", ext));
+
+    if (m_needTeardown)
+      return;
+
+    auto collection = std::make_shared<KMLDataCollection>();
+    if (kmlData)
+      collection->emplace_back(std::move(filePath), std::move(kmlData));
+
+    if (m_needTeardown)
+      return;
+
+    NotifyAboutFinishAsyncLoading(std::move(collection));
+  });
+}
+
 void BookmarkManager::NotifyAboutStartAsyncLoading()
 {
   if (m_needTeardown)
@@ -2069,7 +2115,10 @@ void BookmarkManager::NotifyAboutFinishAsyncLoading(KMLDataCollectionPtr && coll
     if (!m_bookmarkLoadingQueue.empty())
     {
       ASSERT(m_asyncLoadingInProgress, ());
-      LoadBookmarkRoutine(m_bookmarkLoadingQueue.front().m_filename,
+      if (m_bookmarkLoadingQueue.front().m_isReloading)
+        ReloadBookmarkRoutine(m_bookmarkLoadingQueue.front().m_filename);
+      else
+        LoadBookmarkRoutine(m_bookmarkLoadingQueue.front().m_filename,
                           m_bookmarkLoadingQueue.front().m_isTemporaryFile);
       m_bookmarkLoadingQueue.pop_front();
     }
