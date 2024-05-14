@@ -1549,6 +1549,18 @@ std::string BookmarkManager::GetCategoryFileName(kml::MarkGroupId categoryId) co
   return GetBmCategory(categoryId)->GetFileName();
 }
 
+kml::MarkGroupId BookmarkManager::GetCategoryByFileName(std::string const & fileName) const
+{
+  CHECK_THREAD_CHECKER(m_threadChecker, ());
+  for (auto const & c : m_categories)
+  {
+    std::string categoryFileName = c.second->GetFileName();
+    if (categoryFileName == fileName)
+      return c.second->GetID();
+  }
+  return kml::kInvalidMarkGroupId;
+}
+
 m2::RectD BookmarkManager::GetCategoryRect(kml::MarkGroupId categoryId, bool addIconsSize) const
 {
   CHECK_THREAD_CHECKER(m_threadChecker, ());
