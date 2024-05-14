@@ -572,7 +572,7 @@ private:
   void SetCategoryTags(kml::MarkGroupId categoryId, std::vector<std::string> const & tags);
   void SetCategoryAccessRules(kml::MarkGroupId categoryId, kml::AccessRules accessRules);
   void SetCategoryCustomProperty(kml::MarkGroupId categoryId, std::string const & key, std::string const & value);
-  bool DeleteBmCategory(kml::MarkGroupId groupId);
+  bool DeleteBmCategory(kml::MarkGroupId groupId, bool deleteFile);
   void ClearCategories();
 
   void MoveBookmark(kml::MarkId bmID, kml::MarkGroupId curGroupID, kml::MarkGroupId newGroupID);

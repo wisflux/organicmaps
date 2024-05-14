@@ -2372,7 +2372,7 @@ void BookmarkManager::CheckAndResetLastIds()
     idStorage.ResetTrackId();
 }
 
-bool BookmarkManager::DeleteBmCategory(kml::MarkGroupId groupId)
+bool BookmarkManager::DeleteBmCategory(kml::MarkGroupId groupId, bool deleteFile)
 {
   CHECK_THREAD_CHECKER(m_threadChecker, ());
   auto it = m_categories.find(groupId);
@@ -2382,7 +2382,8 @@ bool BookmarkManager::DeleteBmCategory(kml::MarkGroupId groupId)
   ClearGroup(groupId);
   m_changesTracker.OnDeleteGroup(groupId);
 
-  FileWriter::DeleteFileX(it->second->GetFileName());
+  if (deleteFile)
+    FileWriter::DeleteFileX(it->second->GetFileName());
 
   DeleteCompilations(it->second->GetCategoryData().m_compilationIds);
   m_categories.erase(it);
@@ -3451,7 +3452,7 @@ void BookmarkManager::EditSession::SetCategoryCustomProperty(kml::MarkGroupId ca
 
 bool BookmarkManager::EditSession::DeleteBmCategory(kml::MarkGroupId groupId)
 {
-  return m_bmManager.DeleteBmCategory(groupId);
+  return m_bmManager.DeleteBmCategory(groupId, true);
 }
 
 void BookmarkManager::EditSession::NotifyChanges()
