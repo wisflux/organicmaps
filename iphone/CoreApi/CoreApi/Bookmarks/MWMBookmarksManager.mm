@@ -224,6 +224,19 @@ static BookmarkManager::SortingType convertSortingTypeToCore(MWMBookmarksSorting
   return @(self.bm.GetCategoryName(groupId).c_str());
 }
 
+- (NSString *)getCategoryFileName:(MWMMarkGroupID)groupId
+{
+  return @(self.bm.GetCategoryFileName(groupId).c_str());
+}
+
+- (nullable NSNumber *)getCategoryByFileName:(NSString *)fileName
+{
+  auto groupId = self.bm.GetCategoryByFileName(fileName.UTF8String);
+  if (groupId == kml::kInvalidMarkGroupId)
+    return nil;
+  return [NSNumber numberWithUnsignedLongLong:groupId];;
+}
+
 - (uint64_t)getCategoryMarksCount:(MWMMarkGroupID)groupId
 {
   return self.bm.GetUserMarkIds(groupId).size();
@@ -349,6 +362,11 @@ static BookmarkManager::SortingType convertSortingTypeToCore(MWMBookmarksSorting
 - (BOOL)checkCategoryName:(NSString *)name
 {
   return !self.bm.IsUsedCategoryName(name.UTF8String);
+}
+
+- (BOOL)checkCategory:(MWMMarkGroupID)groupId
+{
+  return !self.bm.HasBmCategory(groupId);
 }
 
 - (NSArray<NSNumber *> *)availableSortingTypes:(MWMMarkGroupID)groupId hasMyPosition:(BOOL)hasMyPosition{

@@ -43,6 +43,8 @@ NS_SWIFT_NAME(BookmarksManager)
 - (BOOL)isCategoryEmpty:(MWMMarkGroupID)groupId;
 - (void)prepareForSearch:(MWMMarkGroupID)groupId;
 - (NSString *)getCategoryName:(MWMMarkGroupID)groupId;
+- (NSString *)getCategoryFileName:(MWMMarkGroupID)groupId;
+- (nullable NSNumber *)getCategoryByFileName:(NSString *)fileName;
 - (uint64_t)getCategoryMarksCount:(MWMMarkGroupID)groupId;
 - (uint64_t)getCategoryTracksCount:(MWMMarkGroupID)groupId;
 - (MWMBookmarkGroupAccessStatus)getCategoryAccessStatus:(MWMMarkGroupID)groupId;
@@ -63,6 +65,7 @@ NS_SWIFT_NAME(BookmarksManager)
 - (void)setUserCategoriesVisible:(BOOL)isVisible;
 - (void)deleteCategory:(MWMMarkGroupID)groupId;
 - (BOOL)checkCategoryName:(NSString *)name;
+- (BOOL)checkCategory:(MWMMarkGroupID)groupId;
 - (NSArray<NSNumber *> *)availableSortingTypes:(MWMMarkGroupID)groupId hasMyPosition:(BOOL)hasMyPosition;
 - (void)sortBookmarks:(MWMMarkGroupID)groupId
           sortingType:(MWMBookmarksSortingType)sortingType
