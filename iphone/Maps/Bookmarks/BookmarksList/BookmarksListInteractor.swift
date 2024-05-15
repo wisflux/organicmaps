@@ -15,12 +15,24 @@ extension BookmarksListSortingType {
   }
 }
 
-final class BookmarksListInteractor {
-  private let markGroupId: MWMMarkGroupID
-  private var bookmarksManager: BookmarksManager { BookmarksManager.shared() }
+final class BookmarksListInteractor: NSObject {
+  private var markGroupId: MWMMarkGroupID
+  private var markGroupFileName: String
+  private var bookmarksManager: BookmarksManager
+
+  var onReloadGroup: ((GroupReloadingResult) -> Void)?
 
   init(markGroupId: MWMMarkGroupID) {
     self.markGroupId = markGroupId
+    let bookmarksManager = BookmarksManager.shared()
+    self.markGroupFileName = bookmarksManager.getCategoryFileName(markGroupId)
+    self.bookmarksManager = bookmarksManager
+    super.init()
+    self.addToBookmarksManagerObserverList()
+  }
+
+  deinit {
+    removeFromBookmarksManagerObserverList()
   }
 }
 
@@ -150,5 +162,29 @@ extension BookmarksListInteractor: IBookmarksListInteractor {
 
   func finishExportFile() {
     bookmarksManager.finishShareCategory()
+  }
+
+  func addToBookmarksManagerObserverList() {
+    bookmarksManager.add(self)
+  }
+
+  func removeFromBookmarksManagerObserverList() {
+    bookmarksManager.remove(self)
+  }
+
+  func reloadCategory() {
+    guard let newMarkGroupId = bookmarksManager.getCategoryByFileName(markGroupFileName)?.uint64Value else {
+      onReloadGroup?(.notFound)
+      return
+    }
+    markGroupId = newMarkGroupId
+    onReloadGroup?(.success)
+  }
+}
+
+// MARK: - BookmarksObserver
+extension BookmarksListInteractor: BookmarksObserver {
+  func onBookmarksLoadFinished() {
+    reloadCategory()
   }
 }
