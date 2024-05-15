@@ -192,6 +192,18 @@ static BookmarkManager::SortingType convertSortingTypeToCore(MWMBookmarksSorting
   self.bm.LoadBookmarks();
 }
 
+- (void)reloadCategoryAtFilePath:(NSString *)filePath
+{
+  self.bm.ReloadBookmark(filePath.UTF8String);
+}
+
+- (void)deleteCategoryAtFilePath:(NSString *)filePath
+{
+  auto const groupId = self.bm.GetCategoryByFileName(filePath.UTF8String);
+  if (groupId)
+    [self deleteCategory:groupId];
+}
+
 #pragma mark - Categories
 
 - (BOOL)areAllCategoriesEmpty
