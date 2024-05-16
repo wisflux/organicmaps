@@ -243,16 +243,15 @@ struct StreetNamesCellStrategy : BaseCellStategy
   m_languages.reserve(3);
   auto const & v = tts.availableLanguages;
   NSAssert(!v.empty(), @"Vector can't be empty!");
-  pair<string, string> const standart = v.front();
+  pair<string, string> const standart = tts.standardLanguage;
   m_languages.push_back(standart);
 
   using namespace tts;
   NSString * currentBcp47 = [AVSpeechSynthesisVoice currentLanguageCode];
   string const currentBcp47Str = currentBcp47.UTF8String;
-  string const currentTwineStr = bcp47ToTwineLanguage(currentBcp47);
   if (currentBcp47Str != standart.first && !currentBcp47Str.empty())
   {
-    string const translated = translatedTwine(currentTwineStr);
+    string const translated = translateLocale(currentBcp47Str);
     pair<string, string> const cur{currentBcp47Str, translated};
     if (translated.empty() || find(v.begin(), v.end(), cur) != v.end())
       m_languages.push_back(cur);
@@ -266,8 +265,7 @@ struct StreetNamesCellStrategy : BaseCellStategy
     string const savedLanguage = nsSavedLanguage.UTF8String;
     if (savedLanguage != currentBcp47Str && savedLanguage != standart.first &&
         !savedLanguage.empty())
-      m_languages.emplace_back(
-          make_pair(savedLanguage, translatedTwine(bcp47ToTwineLanguage(nsSavedLanguage))));
+      m_languages.emplace_back(savedLanguage, translateLocale(savedLanguage));
   }
 }
 
