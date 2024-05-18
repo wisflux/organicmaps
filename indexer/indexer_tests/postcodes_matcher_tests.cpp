@@ -1,22 +1,16 @@
-#include "../../testing/testing.hpp"
+#include "testing/testing.hpp"
 
 #include "indexer/postcodes_matcher.hpp"
-#include "indexer/search_delimiters.hpp"
-#include "indexer/search_string_utils.hpp"
 
-#include "base/stl_helpers.hpp"
-#include "base/string_utils.hpp"
 
-using namespace strings;
+namespace postcodes_matcher_test
+{
+using namespace search;
 
-namespace search
-{
-namespace v2
-{
-namespace
-{
 UNIT_TEST(PostcodesMatcher_Smoke)
 {
+  TEST(!LooksLikePostcode("G4", false /* handleAsPrefix */), ());
+
   TEST(LooksLikePostcode("141701", false /* handleAsPrefix */), ());
   TEST(LooksLikePostcode("141", true /* handleAsPrefix */), ());
   TEST(LooksLikePostcode("BA6 8JP", true /* handleAsPrefix */), ());
@@ -37,6 +31,5 @@ UNIT_TEST(PostcodesMatcher_Smoke)
   TEST(!LooksLikePostcode("москва", true /* handleAsPrefix */), ());
   TEST(!LooksLikePostcode("39 с 79", true /* handleAsPrefix */), ());
 }
-}  // namespace
-}  // namespace v2
-}  // namespace search
+
+} // namespace postcodes_matcher_test

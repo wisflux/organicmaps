@@ -72,7 +72,6 @@ size_t constexpr kPostcodesRectsCacheSize = 10;
 size_t constexpr kSuburbsRectsCacheSize = 10;
 size_t constexpr kLocalityRectsCacheSize = 10;
 
-UniString const kUniSpace(MakeUniString(" "));
 
 struct ScopedMarkTokens
 {
@@ -685,7 +684,7 @@ void Geocoder::InitLayer(Model::Type type, TokenRange const & tokenRange, Featur
   layer.m_type = type;
   layer.m_tokenRange = tokenRange;
 
-  JoinQueryTokens(m_params, layer.m_tokenRange, kUniSpace /* sep */, layer.m_subQuery);
+  JoinQueryTokens(m_params, layer.m_tokenRange, UniString::kSpace /* sep */, layer.m_subQuery);
   layer.m_lastTokenIsPrefix =
       !layer.m_tokenRange.Empty() && m_params.IsPrefixToken(layer.m_tokenRange.End() - 1);
 }
@@ -1170,7 +1169,7 @@ void Geocoder::WithPostcodes(BaseContext & ctx, Fn && fn)
     {
       auto & postcodePoints = m_postcodePointsCache.Get(*m_context);
       UniString postcodeQuery;
-      JoinQueryTokens(m_params, tokenRange, kUniSpace /* sep */, postcodeQuery);
+      JoinQueryTokens(m_params, tokenRange, UniString::kSpace /* sep */, postcodeQuery);
       vector<m2::PointD> points;
       postcodePoints.Get(postcodeQuery, points);
       for (auto const & p : points)
