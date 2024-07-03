@@ -202,10 +202,6 @@ extension PlacePageInteractor: ActionBarViewControllerDelegate {
       MWMPlacePageManagerHelper.routeRemoveStop(placePageData)
     case .routeTo:
       MWMPlacePageManagerHelper.route(to: placePageData)
-    case .share:
-      if let shareVC = ActivityViewController.share(forPlacePage: placePageData), let mvc = MapViewController.shared() {
-        shareVC.present(inParentViewController: mvc, anchorView: actionBar.popoverSourceView)
-      }
     case .avoidToll:
       MWMPlacePageManagerHelper.avoidToll()
     case .avoidDirty:
@@ -241,6 +237,14 @@ extension PlacePageInteractor: PlacePageHeaderViewControllerDelegate {
 
   func previewDidPressExpand() {
     presenter?.showNextStop()
+  }
+
+  func previewDidPressShare(from sourceView: UIView) {
+    guard let shareViewController = ActivityViewController.share(forPlacePage: placePageData), let mapViewController else {
+      LOG(.error, "Failed to instantiate ActivityViewController.")
+      return
+    }
+    shareViewController.present(inParentViewController: mapViewController, anchorView: sourceView)
   }
 }
 
