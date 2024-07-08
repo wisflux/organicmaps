@@ -51,6 +51,7 @@ public:
   std::string const & GetName() const;
 
   static void DeleteFileX(std::string const & fName);
+  static void MoveFileX(std::string const & fOld, std::string const & fNew);
 
 protected:
   std::unique_ptr<base::FileData> m_pFileData;

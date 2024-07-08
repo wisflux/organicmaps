@@ -378,6 +378,8 @@ public:
   bool HasRecentlyDeletedBookmark() const { return m_recentlyDeletedBookmark.operator bool(); };
   void ResetRecentlyDeletedBookmark();
 
+  BookmarkManager::KMLDataCollectionPtr GetRecentlyDeletedCategories();
+
   // Used for LoadBookmarks() and unit tests only. Does *not* update last modified time.
   void CreateCategories(KMLDataCollection && dataCollection, bool autoSave = false);
 
@@ -581,7 +583,7 @@ private:
   void SetCategoryTags(kml::MarkGroupId categoryId, std::vector<std::string> const & tags);
   void SetCategoryAccessRules(kml::MarkGroupId categoryId, kml::AccessRules accessRules);
   void SetCategoryCustomProperty(kml::MarkGroupId categoryId, std::string const & key, std::string const & value);
-  bool DeleteBmCategory(kml::MarkGroupId groupId, bool deleteFile);
+  bool DeleteBmCategory(kml::MarkGroupId groupId);
   void ClearCategories();
 
   void MoveBookmark(kml::MarkId bmID, kml::MarkGroupId curGroupID, kml::MarkGroupId newGroupID);

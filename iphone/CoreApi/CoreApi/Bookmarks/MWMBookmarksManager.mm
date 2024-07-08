@@ -9,6 +9,7 @@
 #include "Framework.h"
 
 #include "map/bookmarks_search_params.hpp"
+#include "map/bookmark_helpers.hpp"
 
 #include "coding/internal/file_data.hpp"
 
@@ -358,8 +359,6 @@ static KmlFileType convertFileTypeToCore(MWMKmlFileType fileType) {
 // MARK: - RecentlyDeletedCategoriesManager
 - (void)deleteCategory:(MWMMarkGroupID)groupId
 {
-  [self trashCategory:groupId];
-  
   self.bm.GetEditSession().DeleteBmCategory(groupId);
   [self loopObservers:^(id<MWMBookmarksObserver> observer) {
     if ([observer respondsToSelector:@selector(onBookmarksCategoryDeleted:)])
@@ -367,10 +366,15 @@ static KmlFileType convertFileTypeToCore(MWMKmlFileType fileType) {
   }];
 }
 
-- (NSArray<NSURL *> *)getRecentlyDeletedCategories {
-  NSError * error;
-  NSArray<NSURL *> * contents = [NSFileManager.defaultManager contentsOfDirectoryAtURL:[self bookmarksDirectoryURLBasedOn:self.trashDirectoryURL] includingPropertiesForKeys:@[NSURLNameKey, NSURLCreationDateKey, NSURLPathKey] options:NSDirectoryEnumerationSkipsHiddenFiles error:&error];
-  return contents;
+// TODO: move to cpp
+- (NSArray<NSString *> *)getRecentlyDeletedCategories {
+  auto const collection = self.bm.GetRecentlyDeletedCategories();
+  NSMutableArray<NSString *> * result = [[NSMutableArray alloc] initWithCapacity:collection->size()];
+  for (auto const & recentlyDeletedCategory : * collection) {
+    auto const name = recentlyDeletedCategory.second->m_categoryData.m_name[kml::kDefaultLangCode];
+    [result addObject:[NSString stringWithCString:name.c_str() encoding:NSUTF8StringEncoding]];
+  }
+  return result;
 }
 
 - (void)deleteRecentlyDeletedCategoryAtURLs:(NSArray<NSURL *> *)urls; {
@@ -384,6 +388,7 @@ static KmlFileType convertFileTypeToCore(MWMKmlFileType fileType) {
 
 - (void)recoverRecentlyDeletedCategoriesAtURLs:(NSArray<NSURL *> *)urls {
   NSError * error;
+  
   for (NSURL * url in urls) {
     NSString * filePath = [[url URLByResolvingSymlinksInPath] path];
     NSRange range = [filePath rangeOfString:[[self.trashDirectoryURL URLByResolvingSymlinksInPath] path]];
@@ -404,51 +409,42 @@ static KmlFileType convertFileTypeToCore(MWMKmlFileType fileType) {
 }
 
 - (NSURL *)trashDirectoryURL {
-  NSString * trashPathComponent = @".Trash";
-  NSURL * trashURL = [[self documentsDirectoryURL] URLByAppendingPathComponent:trashPathComponent isDirectory:YES];
-  if (![NSFileManager.defaultManager fileExistsAtPath:trashURL.path]) {
-    [NSFileManager.defaultManager createDirectoryAtURL:trashURL withIntermediateDirectories:YES attributes:nil error:nil];
-  }
-  return trashURL;
+//  if (![NSFileManager.defaultManager fileExistsAtPath:trashDirectoryPath.path]) {
+//    [NSFileManager.defaultManager createDirectoryAtURL:trashURL withIntermediateDirectories:YES attributes:nil error:nil];
+//  }
+  auto const trashDirectoryPath = GetTrashDirectory();
+  NSURL * trashDirectoryURL = [NSURL URLWithString:[NSString stringWithUTF8String:trashDirectoryPath.c_str()]];
+  return trashDirectoryURL;
 }
-
-- (NSURL *)bookmarksDirectoryURLBasedOn:(NSURL *)url {
-  NSString * trashPathComponent = @"bookmarks";
-  NSURL * bookmarksURL = [url URLByAppendingPathComponent:trashPathComponent isDirectory:YES];
-  if (![NSFileManager.defaultManager fileExistsAtPath:bookmarksURL.path]) {
-    [NSFileManager.defaultManager createDirectoryAtURL:bookmarksURL withIntermediateDirectories:YES attributes:nil error:nil];
-  }
-  return bookmarksURL;
-}
-
-- (void)trashCategory:(MWMMarkGroupID)groupId {
-  NSError * error;
-
-  NSURL * fileURL = [NSURL fileURLWithPath: @(self.bm.GetCategoryFileName(groupId).c_str())];
-  NSString * filePath = [fileURL absoluteString];
-  NSRange range = [filePath rangeOfString:[self.documentsDirectoryURL absoluteString]];
-  NSString * relativeFilePath = [filePath substringFromIndex:range.location + range.length];
-  NSURL * trashedFileURL = [NSURL URLWithString:relativeFilePath relativeToURL:self.trashDirectoryURL];
-
-  // Resolve name conflicts
-  if ([NSFileManager.defaultManager fileExistsAtPath:trashedFileURL.path]) {
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyyMMdd-HHmmss"];
-    NSString * dateString = [dateFormatter stringFromDate:[NSDate date]];
-
-    NSString * newTrashedFilePath = [[trashedFileURL.path stringByDeletingPathExtension] stringByAppendingFormat:@"-%@.%@", dateString, trashedFileURL.pathExtension];
-    trashedFileURL = [NSURL fileURLWithPath:newTrashedFilePath];
-  }
-
-  NSString * parentDirectoryPath = [trashedFileURL.path stringByDeletingLastPathComponent];
-  if (![NSFileManager.defaultManager fileExistsAtPath:parentDirectoryPath])
-    [NSFileManager.defaultManager createDirectoryAtPath:parentDirectoryPath withIntermediateDirectories:YES attributes:nil error:nil];
-
-  [NSFileManager.defaultManager moveItemAtPath:fileURL.path toPath:trashedFileURL.path error:&error];
-
-  if (error)
-    NSLog(@"Error: %@", error);
-}
+//
+//- (void)trashCategory:(MWMMarkGroupID)groupId {
+//  NSError * error;
+//
+//  NSURL * fileURL = [NSURL fileURLWithPath: @(self.bm.GetCategoryFileName(groupId).c_str())];
+//  NSString * filePath = [fileURL absoluteString];
+//  NSRange range = [filePath rangeOfString:[self.documentsDirectoryURL absoluteString]];
+//  NSString * relativeFilePath = [filePath substringFromIndex:range.location + range.length];
+//  NSURL * trashedFileURL = [NSURL URLWithString:relativeFilePath relativeToURL:self.trashDirectoryURL];
+//
+//  // Resolve name conflicts
+//  if ([NSFileManager.defaultManager fileExistsAtPath:trashedFileURL.path]) {
+//    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//    [dateFormatter setDateFormat:@"yyyyMMdd-HHmmss"];
+//    NSString * dateString = [dateFormatter stringFromDate:[NSDate date]];
+//
+//    NSString * newTrashedFilePath = [[trashedFileURL.path stringByDeletingPathExtension] stringByAppendingFormat:@"-%@.%@", dateString, trashedFileURL.pathExtension];
+//    trashedFileURL = [NSURL fileURLWithPath:newTrashedFilePath];
+//  }
+//
+//  NSString * parentDirectoryPath = [trashedFileURL.path stringByDeletingLastPathComponent];
+//  if (![NSFileManager.defaultManager fileExistsAtPath:parentDirectoryPath])
+//    [NSFileManager.defaultManager createDirectoryAtPath:parentDirectoryPath withIntermediateDirectories:YES attributes:nil error:nil];
+//
+//  [NSFileManager.defaultManager moveItemAtPath:fileURL.path toPath:trashedFileURL.path error:&error];
+//
+//  if (error)
+//    NSLog(@"Error: %@", error);
+//}
 /* FIXME: Temporary solution. Should be implemented in cpp - End */
 
 - (BOOL)checkCategoryName:(NSString *)name

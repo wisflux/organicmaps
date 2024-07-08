@@ -404,6 +404,16 @@ void BookmarkManager::ResetRecentlyDeletedBookmark()
   m_recentlyDeletedBookmark.reset();
 }
 
+BookmarkManager::KMLDataCollectionPtr BookmarkManager::GetRecentlyDeletedCategories()
+{
+  auto collection = LoadBookmarks(GetTrashDirectory(), kKmlExtension, KmlFileType::Text,
+                                  [](kml::FileData const &)
+                                  {
+    return true;
+  });
+  return collection;
+}
+
 void BookmarkManager::DetachUserMark(kml::MarkId bmId, kml::MarkGroupId catId)
 {
   GetGroup(catId)->DetachUserMark(bmId);
@@ -2485,7 +2495,7 @@ void BookmarkManager::CheckAndResetLastIds()
     idStorage.ResetTrackId();
 }
 
-bool BookmarkManager::DeleteBmCategory(kml::MarkGroupId groupId, bool deleteFile)
+bool BookmarkManager::DeleteBmCategory(kml::MarkGroupId groupId)
 {
   CHECK_THREAD_CHECKER(m_threadChecker, ());
   auto it = m_categories.find(groupId);
@@ -2495,8 +2505,9 @@ bool BookmarkManager::DeleteBmCategory(kml::MarkGroupId groupId, bool deleteFile
   ClearGroup(groupId);
   m_changesTracker.OnDeleteGroup(groupId);
 
-  if (deleteFile)
-    FileWriter::DeleteFileX(it->second->GetFileName());
+  auto const filePath = it->second->GetFileName();
+  auto const trashedFilePath = GenerateValidAndUniqueTrashedFilePath(base::FileNameFromFullPath(filePath));
+  FileWriter::MoveFileX(filePath, trashedFilePath);
 
   DeleteCompilations(it->second->GetCategoryData().m_compilationIds);
   m_categories.erase(it);
@@ -3575,7 +3586,7 @@ void BookmarkManager::EditSession::SetCategoryCustomProperty(kml::MarkGroupId ca
 
 bool BookmarkManager::EditSession::DeleteBmCategory(kml::MarkGroupId groupId)
 {
-  return m_bmManager.DeleteBmCategory(groupId, true);
+  return m_bmManager.DeleteBmCategory(groupId);
 }
 
 void BookmarkManager::EditSession::NotifyChanges()

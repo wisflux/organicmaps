@@ -92,10 +92,12 @@ inline std::string DebugPrint(KmlFileType fileType)
 /// @name File name/path helpers.
 /// @{
 std::string GetBookmarksDirectory();
+std::string GetTrashDirectory();
 std::string RemoveInvalidSymbols(std::string const & name);
 std::string GenerateUniqueFileName(const std::string & path, std::string name, std::string_view ext = kKmlExtension);
 std::string GenerateValidAndUniqueFilePathForKML(std::string const & fileName);
 std::string GenerateValidAndUniqueFilePathForGPX(std::string const & fileName);
+std::string GenerateValidAndUniqueTrashedFilePath(std::string const & fileName);
 /// @}
 
 /// @name SerDes helpers.

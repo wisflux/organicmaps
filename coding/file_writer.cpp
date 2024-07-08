@@ -48,3 +48,8 @@ void FileWriter::DeleteFileX(std::string const & fName)
 {
   UNUSED_VALUE(base::DeleteFileX(fName));
 }
+
+void FileWriter::MoveFileX(std::string const & fOld, std::string const & fNew)
+{
+  UNUSED_VALUE(base::MoveFileX(fOld, fNew));
+}
