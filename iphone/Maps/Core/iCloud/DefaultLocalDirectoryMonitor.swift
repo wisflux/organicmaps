@@ -143,32 +143,59 @@ final class DefaultLocalDirectoryMonitor: LocalDirectoryMonitor {
     dispatchSourceDebounceState = .started(source: source)
 
     do {
-      let files = try fileManager.contentsOfDirectory(at: directory, includingPropertiesForKeys: [], options: [.skipsHiddenFiles], fileExtension: fileType.fileExtension)
-      let contents = files.compactMap { url in
-        do {
-          let metadataItem = try LocalMetadataItem(fileUrl: url)
-          return metadataItem
-        } catch {
-          delegate?.didReceiveLocalMonitorError(error)
-          return nil
-        }
-      }
-      let contentMetadataItems = LocalContents(contents)
+      let regularContents = try getRegularContents(onError: delegate?.didReceiveLocalMonitorError)
+      let trashedContents = try getTrashedContents(onError: delegate?.didReceiveLocalMonitorError)
+      let contents = regularContents + trashedContents
 
       if !didFinishGatheringIsCalled {
         didFinishGatheringIsCalled = true
         LOG(.debug, "LocalMonitor: didFinishGathering called.")
-        LOG(.debug, "LocalMonitor: contentMetadataItems count: \(contentMetadataItems.count)")
-        delegate?.didFinishGathering(contents: contentMetadataItems)
+        LOG(.debug, "LocalMonitor: contentMetadataItems count: \(regularContents.count)")
+        delegate?.didFinishGathering(contents: contents)
       } else {
         LOG(.debug, "LocalMonitor: didUpdate called.")
-        LOG(.debug, "LocalMonitor: contentMetadataItems count: \(contentMetadataItems.count)")
-        delegate?.didUpdate(contents: contentMetadataItems)
+        LOG(.debug, "LocalMonitor: contentMetadataItems count: \(regularContents.count)")
+        delegate?.didUpdate(contents: contents)
       }
     } catch {
       LOG(.debug, "\(error)")
       delegate?.didReceiveLocalMonitorError(SynchronizationError.failedToRetrieveLocalDirectoryContent)
     }
+  }
+
+  private func getRegularContents(onError: ((Error) -> Void)?) throws -> LocalContents {
+    guard let items = try? fileManager.contentsOfDirectory(at: directory,
+                                                           includingPropertiesForKeys: [.isDirectoryKey],
+                                                           options: [.skipsPackageDescendants, .skipsSubdirectoryDescendants]) else {
+      throw SynchronizationError.failedToRetrieveLocalDirectoryContent
+    }
+    let localMetadataItems = LocalContents(items.compactMap { url in
+      do {
+        return try LocalMetadataItem(fileUrl: url)
+      } catch {
+        onError?(error)
+        return nil
+      }
+    })
+    return localMetadataItems
+  }
+
+  private func getTrashedContents(onError: ((Error) -> Void)?) throws -> LocalContents {
+    guard let trashedItems = try? fileManager.contentsOfDirectory(at: fileManager.trashDirectoryUrl(for: fileManager.documentsDirectoryUrl),
+                                                            includingPropertiesForKeys: [.isDirectoryKey],
+                                                            options: [.skipsPackageDescendants, .skipsSubdirectoryDescendants]) else {
+      throw SynchronizationError.failedToRetrieveLocalDirectoryContent
+    }
+
+    let trashedLocalMetadataItems = LocalContents(trashedItems.compactMap { url in
+      do {
+        return try LocalMetadataItem(fileUrl: url, isRemoved: true)
+      } catch {
+        onError?(error)
+        return nil
+      }
+    })
+    return trashedLocalMetadataItems
   }
 
   private func suspendDispatchSource() {

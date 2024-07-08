@@ -489,8 +489,8 @@
 		EDA5DD4A2C398AFE00DEE4B6 /* RecentlyDeletedCategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA5DD442C398AFE00DEE4B6 /* RecentlyDeletedCategoriesViewController.swift */; };
 		EDA5DD4B2C398AFE00DEE4B6 /* RecentlyDeletedCategoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA5DD452C398AFE00DEE4B6 /* RecentlyDeletedCategoriesViewModel.swift */; };
 		EDA5DD4C2C398AFE00DEE4B6 /* RecentlyDeletedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA5DD462C398AFE00DEE4B6 /* RecentlyDeletedTableViewCell.swift */; };
-		EDA5DD502C398B2200DEE4B6 /* MockRecentlyDeletedCategoriesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA5DD4D2C398B2200DEE4B6 /* MockRecentlyDeletedCategoriesManager.swift */; };
 		EDA5DD552C399DAC00DEE4B6 /* RecentlyDeletedCategoriesViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA5DD4E2C398B2200DEE4B6 /* RecentlyDeletedCategoriesViewModelTests.swift */; };
+		EDA5DD652C3C371000DEE4B6 /* MockRecentlyDeletedCategoriesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA5DD4D2C398B2200DEE4B6 /* MockRecentlyDeletedCategoriesManager.swift */; };
 		EDBD68072B625724005DD151 /* LocationServicesDisabledAlert.xib in Resources */ = {isa = PBXBuildFile; fileRef = EDBD68062B625724005DD151 /* LocationServicesDisabledAlert.xib */; };
 		EDBD680B2B62572E005DD151 /* LocationServicesDisabledAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDBD680A2B62572E005DD151 /* LocationServicesDisabledAlert.swift */; };
 		EDC3573B2B7B5029001AE9CA /* CALayer+SetCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC3573A2B7B5029001AE9CA /* CALayer+SetCorner.swift */; };
@@ -4645,7 +4645,6 @@
 				47B9065321C7FA400079C85E /* MWMImageCache.m in Sources */,
 				F6FEA82E1C58F108007223CC /* MWMButton.m in Sources */,
 				34B924431DC8A29C0008D971 /* MWMMailViewController.m in Sources */,
-				EDA5DD502C398B2200DEE4B6 /* MockRecentlyDeletedCategoriesManager.swift in Sources */,
 				340475651E081A4600C92850 /* MWMRouter.mm in Sources */,
 				47E3C72F2111F472008B3B27 /* CoverVerticalModalTransitioning.swift in Sources */,
 				34E776101F14B165003040B3 /* VisibleArea.swift in Sources */,
@@ -4688,6 +4687,7 @@
 				ED1ADA332BC6B1B40029209F /* CarPlayServiceTests.swift in Sources */,
 				EDF838C32C00B9D6007E4E67 /* UbiquitousDirectoryMonitorDelegateMock.swift in Sources */,
 				EDF838BE2C00B9D0007E4E67 /* LocalDirectoryMonitorDelegateMock.swift in Sources */,
+				EDA5DD652C3C371000DEE4B6 /* MockRecentlyDeletedCategoriesManager.swift in Sources */,
 				EDF838BF2C00B9D0007E4E67 /* SynchronizationStateManagerTests.swift in Sources */,
 				4B83AE4B2C2E642100B0C3BC /* TTSTesterTest.m in Sources */,
 				EDF838C22C00B9D6007E4E67 /* MetadataItemStubs.swift in Sources */,
@@ -4881,6 +4881,7 @@
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = app.organicmaps.debug;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -4903,6 +4904,7 @@
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = app.organicmaps;
 				PROVISIONING_PROFILE_SPECIFIER = "CarPlay Release";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

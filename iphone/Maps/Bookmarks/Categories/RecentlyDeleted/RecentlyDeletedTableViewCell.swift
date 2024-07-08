@@ -1,5 +1,11 @@
 final class RecentlyDeletedTableViewCell: UITableViewCell {
 
+  struct ViewModel: Equatable {
+    let fileName: String
+    let fileURL: URL
+    let deletionDate: Date
+  }
+
   private static let dateFormatter: DateFormatter = {
     let formatter = DateFormatter()
     formatter.dateStyle = .medium
@@ -16,10 +22,16 @@ final class RecentlyDeletedTableViewCell: UITableViewCell {
     fatalError("init(coder:) has not been implemented")
   }
 
-  func configureWith(_ category: RecentlyDeletedCategory) {
-    textLabel?.text = category.fileName
+  func configureWith(_ viewModel: ViewModel) {
+    textLabel?.text = viewModel.fileName
+    detailTextLabel?.text = Self.dateFormatter.string(from: viewModel.deletionDate)
+  }
+}
 
-    let date = Date(timeIntervalSince1970: category.deletionDate)
-    detailTextLabel?.text = Self.dateFormatter.string(from: date)
+extension RecentlyDeletedTableViewCell.ViewModel {
+  init(_ category: RecentlyDeletedCategory) {
+    self.fileName = category.title
+    self.fileURL = category.fileURL
+    self.deletionDate = category.deletionDate
   }
 }

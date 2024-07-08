@@ -14,6 +14,7 @@ struct LocalMetadataItem: MetadataItem {
   let contentType: String
   let creationDate: TimeInterval
   let lastModificationDate: TimeInterval
+  let isRemoved: Bool
 }
 
 struct CloudMetadataItem: MetadataItem {
@@ -31,24 +32,7 @@ struct CloudMetadataItem: MetadataItem {
 }
 
 extension LocalMetadataItem {
-  init(metadataItem: NSMetadataItem) throws {
-    guard let fileName = metadataItem.value(forAttribute: NSMetadataItemFSNameKey) as? String,
-          let fileUrl = metadataItem.value(forAttribute: NSMetadataItemURLKey) as? URL,
-          let fileSize = metadataItem.value(forAttribute: NSMetadataItemFSSizeKey) as? Int,
-          let contentType = metadataItem.value(forAttribute: NSMetadataItemContentTypeKey) as? String,
-          let creationDate = (metadataItem.value(forAttribute: NSMetadataItemFSCreationDateKey) as? Date)?.timeIntervalSince1970.rounded(.down),
-          let lastModificationDate = (metadataItem.value(forAttribute: NSMetadataItemFSContentChangeDateKey) as? Date)?.timeIntervalSince1970.rounded(.down) else {
-      throw NSError(domain: "LocalMetadataItem", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to initialize LocalMetadataItem from NSMetadataItem"])
-    }
-    self.fileName = fileName
-    self.fileUrl = fileUrl
-    self.fileSize = fileSize
-    self.contentType = contentType
-    self.creationDate = creationDate
-    self.lastModificationDate = lastModificationDate
-  }
-
-  init(fileUrl: URL) throws {
+  init(fileUrl: URL, isRemoved: Bool = false) throws {
     let resources = try fileUrl.resourceValues(forKeys: [.fileSizeKey, .typeIdentifierKey, .contentModificationDateKey, .creationDateKey])
     guard let fileSize = resources.fileSize,
           let contentType = resources.typeIdentifier,
@@ -62,6 +46,7 @@ extension LocalMetadataItem {
     self.contentType = contentType
     self.creationDate = creationDate
     self.lastModificationDate = lastModificationDate
+    self.isRemoved = isRemoved
   }
 
   func fileData() throws -> Data {

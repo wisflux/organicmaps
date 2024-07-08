@@ -227,7 +227,7 @@ std::string GetBookmarksDirectory()
 
 std::string GetTrashDirectory()
 {
-  std::string const trashDir = base::JoinPath(GetPlatform().SettingsDir(), ".Trash");;
+  std::string const trashDir = base::JoinPath(GetPlatform().SettingsDir(), ".Trash");
   if (!Platform::IsFileExistsByFullPath(trashDir) && !Platform::MkDirChecked(trashDir)) {
     CHECK(false, ("Failed to create .Trash directory."));
     return nullptr;

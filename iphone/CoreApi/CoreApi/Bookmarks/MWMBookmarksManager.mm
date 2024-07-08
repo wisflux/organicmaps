@@ -5,6 +5,7 @@
 #import "MWMBookmarkGroup.h"
 #import "MWMCarPlayBookmarkObject.h"
 #import "MWMTrack+Core.h"
+#import "RecentlyDeletedCategory+Core.h"
 
 #include "Framework.h"
 
@@ -354,9 +355,6 @@ static KmlFileType convertFileTypeToCore(MWMKmlFileType fileType) {
   self.bm.SetAllCategoriesVisibility(isVisible);
 }
 
-/* FIXME: - Temporary solution. Should be implemented in cpp. Start */
-
-// MARK: - RecentlyDeletedCategoriesManager
 - (void)deleteCategory:(MWMMarkGroupID)groupId
 {
   self.bm.GetEditSession().DeleteBmCategory(groupId);
@@ -366,86 +364,36 @@ static KmlFileType convertFileTypeToCore(MWMKmlFileType fileType) {
   }];
 }
 
-// TODO: move to cpp
-- (NSArray<NSString *> *)getRecentlyDeletedCategories {
-  auto const collection = self.bm.GetRecentlyDeletedCategories();
-  NSMutableArray<NSString *> * result = [[NSMutableArray alloc] initWithCapacity:collection->size()];
-  for (auto const & recentlyDeletedCategory : * collection) {
-    auto const name = recentlyDeletedCategory.second->m_categoryData.m_name[kml::kDefaultLangCode];
-    [result addObject:[NSString stringWithCString:name.c_str() encoding:NSUTF8StringEncoding]];
+// MARK: - RecentlyDeletedCategoriesManager
+- (NSArray<RecentlyDeletedCategory *> *)getRecentlyDeletedCategories {
+  auto const categoriesCollection = self.bm.GetRecentlyDeletedCategories();
+  NSMutableArray<RecentlyDeletedCategory *> * recentlyDeletedCategories = [[NSMutableArray alloc] initWithCapacity:categoriesCollection->size()];
+
+  for (auto const & recentlyDeletedCategory : * categoriesCollection) {
+    auto const filePath = recentlyDeletedCategory.first;
+    auto const & categoryPtr = recentlyDeletedCategory.second;
+    ASSERT(categoryPtr, ("Recently deleted category shouldn't be nil."));
+    RecentlyDeletedCategory * category = [[RecentlyDeletedCategory alloc] initWithCategoryData:categoryPtr->m_categoryData filePath:filePath];
+    [recentlyDeletedCategories addObject:category];
   }
-  return result;
+  return recentlyDeletedCategories;
 }
 
-- (void)deleteRecentlyDeletedCategoryAtURLs:(NSArray<NSURL *> *)urls; {
-  NSError * error;
-  for (NSURL * url in urls) {
-    [NSFileManager.defaultManager removeItemAtURL:url error:&error];
-    if (error)
-      NSLog(@"Error: %@", error);
-  }
+- (void)deleteRecentlyDeletedCategoryAtURLs:(NSArray<NSURL *> *)urls {
+  std::vector<std::string> filePaths;
+  for (NSURL * url in urls)
+    filePaths.push_back(url.path.UTF8String);
+  self.bm.DeleteRecentlyDeletedCategoriesAtPaths(filePaths, [self]() {
+    LOG(LDEBUG, ("deleteRecentlyDeletedCategoryAtURLs"));
+  });
 }
 
 - (void)recoverRecentlyDeletedCategoriesAtURLs:(NSArray<NSURL *> *)urls {
-  NSError * error;
-  
-  for (NSURL * url in urls) {
-    NSString * filePath = [[url URLByResolvingSymlinksInPath] path];
-    NSRange range = [filePath rangeOfString:[[self.trashDirectoryURL URLByResolvingSymlinksInPath] path]];
-    NSString * relativeFilePath = [filePath substringFromIndex:range.location + range.length];
-    NSURL * newFileURL = [self.documentsDirectoryURL URLByAppendingPathComponent:relativeFilePath];
-    [NSFileManager.defaultManager moveItemAtURL:url toURL:newFileURL error:&error];
-
-    if (error)
-      NSLog(@"Error: %@", error);
-  }
-
-  [self loadBookmarks];
+  std::vector<std::string> filePaths;
+  for (NSURL * url in urls)
+    filePaths.push_back(url.path.UTF8String);
+  self.bm.RecoverRecentlyDeletedCategoriesAtPaths(filePaths);
 }
-
-// MARK: - Helpers
-- (NSURL *)documentsDirectoryURL {
-  return [NSFileManager.defaultManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask].firstObject;
-}
-
-- (NSURL *)trashDirectoryURL {
-//  if (![NSFileManager.defaultManager fileExistsAtPath:trashDirectoryPath.path]) {
-//    [NSFileManager.defaultManager createDirectoryAtURL:trashURL withIntermediateDirectories:YES attributes:nil error:nil];
-//  }
-  auto const trashDirectoryPath = GetTrashDirectory();
-  NSURL * trashDirectoryURL = [NSURL URLWithString:[NSString stringWithUTF8String:trashDirectoryPath.c_str()]];
-  return trashDirectoryURL;
-}
-//
-//- (void)trashCategory:(MWMMarkGroupID)groupId {
-//  NSError * error;
-//
-//  NSURL * fileURL = [NSURL fileURLWithPath: @(self.bm.GetCategoryFileName(groupId).c_str())];
-//  NSString * filePath = [fileURL absoluteString];
-//  NSRange range = [filePath rangeOfString:[self.documentsDirectoryURL absoluteString]];
-//  NSString * relativeFilePath = [filePath substringFromIndex:range.location + range.length];
-//  NSURL * trashedFileURL = [NSURL URLWithString:relativeFilePath relativeToURL:self.trashDirectoryURL];
-//
-//  // Resolve name conflicts
-//  if ([NSFileManager.defaultManager fileExistsAtPath:trashedFileURL.path]) {
-//    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//    [dateFormatter setDateFormat:@"yyyyMMdd-HHmmss"];
-//    NSString * dateString = [dateFormatter stringFromDate:[NSDate date]];
-//
-//    NSString * newTrashedFilePath = [[trashedFileURL.path stringByDeletingPathExtension] stringByAppendingFormat:@"-%@.%@", dateString, trashedFileURL.pathExtension];
-//    trashedFileURL = [NSURL fileURLWithPath:newTrashedFilePath];
-//  }
-//
-//  NSString * parentDirectoryPath = [trashedFileURL.path stringByDeletingLastPathComponent];
-//  if (![NSFileManager.defaultManager fileExistsAtPath:parentDirectoryPath])
-//    [NSFileManager.defaultManager createDirectoryAtPath:parentDirectoryPath withIntermediateDirectories:YES attributes:nil error:nil];
-//
-//  [NSFileManager.defaultManager moveItemAtPath:fileURL.path toPath:trashedFileURL.path error:&error];
-//
-//  if (error)
-//    NSLog(@"Error: %@", error);
-//}
-/* FIXME: Temporary solution. Should be implemented in cpp - End */
 
 - (BOOL)checkCategoryName:(NSString *)name
 {

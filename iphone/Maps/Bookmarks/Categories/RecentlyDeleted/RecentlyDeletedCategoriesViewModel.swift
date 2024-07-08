@@ -1,25 +1,8 @@
-struct RecentlyDeletedCategory: Equatable {
-  let fileName: String
-  let fileURL: URL
-  let deletionDate: TimeInterval
-}
-
-private struct TextFiltering {
-  static let empty = TextFiltering(searchText: "")
-
-  var searchText: String
-
-  func filter(_ category: RecentlyDeletedCategory) -> Bool {
-    guard !searchText.isEmpty else { return true }
-    return category.fileName.localizedCaseInsensitiveContains(searchText)
-  }
-}
-
 final class RecentlyDeletedCategoriesViewModel {
 
   enum Section: CaseIterable {
     struct Model: Equatable {
-      var categories: [RecentlyDeletedCategory]
+      var content: [RecentlyDeletedTableViewCell.ViewModel]
     }
 
     case main
@@ -33,11 +16,12 @@ final class RecentlyDeletedCategoriesViewModel {
   }
 
   private var bookmarksManager: any RecentlyDeletedCategoriesManager
-  private(set) var selectedIndexPaths: [IndexPath] = []
   private var dataSource: [Section.Model] = []
-  private(set) var filteredDataSource: [Section.Model] = []
   private(set) var state: State = .normal
-  private var textFilter: TextFiltering = .empty
+  private(set) var filteredDataSource: [Section.Model] = []
+  private var selectedIndexPaths: [IndexPath] = []
+  private var searchText = String()
+
   var stateDidChange: ((State) -> Void)?
   var filteredDataSourceDidChange: (([Section.Model]) -> Void)?
 
@@ -54,7 +38,7 @@ final class RecentlyDeletedCategoriesViewModel {
   }
 
   private func updateFilteredDataSource(_ dataSource: [Section.Model]) {
-    filteredDataSource = dataSource.filtered(using: textFilter)
+    filteredDataSource = dataSource.filtered(using: searchText)
     filteredDataSourceDidChange?(filteredDataSource)
   }
 
@@ -62,7 +46,7 @@ final class RecentlyDeletedCategoriesViewModel {
     if isSelected {
       updateState(to: .editingAndSomeSelected)
     } else {
-      let allDeselected = dataSource.allSatisfy { $0.categories.isEmpty }
+      let allDeselected = dataSource.allSatisfy { $0.content.isEmpty }
       updateState(to: allDeselected ? .editingAndNothingSelected : .editingAndSomeSelected)
     }
   }
@@ -71,14 +55,14 @@ final class RecentlyDeletedCategoriesViewModel {
     var fileToRemoveURLs: [URL]
     if indexPaths.isEmpty {
       // Remove all without selection.
-      fileToRemoveURLs = dataSource.flatMap { $0.categories.map { $0.fileURL } }
+      fileToRemoveURLs = dataSource.flatMap { $0.content.map { $0.fileURL } }
       dataSource.removeAll()
     } else {
       fileToRemoveURLs = [URL]()
       indexPaths.forEach { [weak self] indexPath in
         guard let self else { return }
-        let fileToRemoveURL = self.filteredDataSource[indexPath.section].categories[indexPath.row].fileURL
-        self.dataSource[indexPath.section].categories.removeAll { $0.fileURL == fileToRemoveURL }
+        let fileToRemoveURL = self.filteredDataSource[indexPath.section].content[indexPath.row].fileURL
+        self.dataSource[indexPath.section].content.removeAll { $0.fileURL == fileToRemoveURL }
         fileToRemoveURLs.append(fileToRemoveURL)
       }
     }
@@ -88,7 +72,7 @@ final class RecentlyDeletedCategoriesViewModel {
   }
 
   private func removeSelectedCategories(completion: ([URL]) -> Void) {
-    let removeAll = selectedIndexPaths.isEmpty || selectedIndexPaths.count == dataSource.flatMap({ $0.categories }).count
+    let removeAll = selectedIndexPaths.isEmpty || selectedIndexPaths.count == dataSource.flatMap({ $0.content }).count
     removeCategories(at: removeAll ? [] : selectedIndexPaths, completion: completion)
     selectedIndexPaths.removeAll()
     updateState(to: .normal)
@@ -98,14 +82,9 @@ final class RecentlyDeletedCategoriesViewModel {
 // MARK: - Public methods
 extension RecentlyDeletedCategoriesViewModel {
   func fetchRecentlyDeletedCategories() {
-    let recentlyDeletedCategoryURLs = bookmarksManager.getRecentlyDeletedCategories()
-    let categories = recentlyDeletedCategoryURLs.map { fileUrl in
-      let fileName = fileUrl.lastPathComponent
-      // TODO: remove this code with cpp
-      let deletionDate = (try! fileUrl.resourceValues(forKeys: [.creationDateKey]).creationDate ?? Date()).timeIntervalSince1970
-      return RecentlyDeletedCategory(fileName: fileName, fileURL: fileUrl, deletionDate: deletionDate)
-    }
-    dataSource = [Section.Model(categories: categories)]
+    let categories = bookmarksManager.getRecentlyDeletedCategories()
+    let categoriesViewModels = categories.map(RecentlyDeletedTableViewCell.ViewModel.init)
+    dataSource = [Section.Model(content: categoriesViewModels)]
     updateFilteredDataSource(dataSource)
   }
 
@@ -143,7 +122,7 @@ extension RecentlyDeletedCategoriesViewModel {
 
   func selectAllCategories() {
     selectedIndexPaths = dataSource.enumerated().flatMap { sectionIndex, section in
-      section.categories.indices.map { IndexPath(row: $0, section: sectionIndex) }
+      section.content.indices.map { IndexPath(row: $0, section: sectionIndex) }
     }
     updateState(to: .editingAndSomeSelected)
   }
@@ -163,7 +142,7 @@ extension RecentlyDeletedCategoriesViewModel {
   }
 
   func cancelSearching() {
-    textFilter.searchText.removeAll()
+    searchText.removeAll()
     selectedIndexPaths.removeAll()
     updateFilteredDataSource(dataSource)
     updateState(to: .normal)
@@ -175,16 +154,19 @@ extension RecentlyDeletedCategoriesViewModel {
       cancelSearching()
       return
     }
-    textFilter.searchText = searchText
+    self.searchText = searchText
     updateFilteredDataSource(dataSource)
   }
 }
 
 private extension Array where Element == RecentlyDeletedCategoriesViewModel.Section.Model {
-  func filtered(using filtering: TextFiltering) -> [Element]{
+  func filtered(using searchText: String) -> [Element] {
     let filteredArray = map { section in
-      let filteredCategories = section.categories.filter { filtering.filter($0) }
-      return RecentlyDeletedCategoriesViewModel.Section.Model(categories: filteredCategories)
+      let filteredContent = section.content.filter {
+        guard !searchText.isEmpty else { return true }
+        return $0.fileName.localizedCaseInsensitiveContains(searchText)
+      }
+      return RecentlyDeletedCategoriesViewModel.Section.Model(content: filteredContent)
     }
     return filteredArray
   }

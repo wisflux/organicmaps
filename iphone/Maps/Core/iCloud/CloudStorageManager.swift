@@ -293,8 +293,12 @@ extension CloudStorageManager {
 
 // MARK: - FileManager + Directories
 extension FileManager {
+  var documentsDirectoryUrl: URL {
+    urls(for: .documentDirectory, in: .userDomainMask).first!
+  }
+
   var bookmarksDirectoryUrl: URL {
-    urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent(kBookmarksDirectoryName, isDirectory: true)
+    documentsDirectoryUrl.appendingPathComponent(kBookmarksDirectoryName, isDirectory: true)
   }
 
   func trashDirectoryUrl(for baseDirectoryUrl: URL) throws -> URL {

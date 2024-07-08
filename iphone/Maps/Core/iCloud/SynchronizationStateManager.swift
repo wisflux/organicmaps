@@ -40,7 +40,11 @@ final class DefaultSynchronizationStateManager: SynchronizationStateManager {
   private(set) var localContentsGatheringIsFinished = false
   private(set) var cloudContentGatheringIsFinished = false
 
-  private(set) var currentLocalContents: LocalContents = []
+  private(set) var currentLocalContents: LocalContents = [] {
+   didSet {
+     updateFilteredLocalContents()
+   }
+ }
   private(set) var currentCloudContents: CloudContents = [] {
     didSet {
       updateFilteredCloudContents()
@@ -48,10 +52,13 @@ final class DefaultSynchronizationStateManager: SynchronizationStateManager {
   }
 
   // Cached derived arrays
-  private var trashedCloudContents: [CloudMetadataItem] = []
-  private var notTrashedCloudContents: [CloudMetadataItem] = []
-  private var downloadedCloudContents: [CloudMetadataItem] = []
-  private var notDownloadedCloudContents: [CloudMetadataItem] = []
+  private var trashedLocalContents: LocalContents = []
+  private var notTrashedLocalContents: LocalContents = []
+
+  private var trashedCloudContents: CloudContents = []
+  private var notTrashedCloudContents: CloudContents = []
+  private var downloadedCloudContents: CloudContents = []
+  private var notDownloadedCloudContents: CloudContents = []
 
   private var isInitialSynchronization: Bool
 
@@ -86,6 +93,11 @@ final class DefaultSynchronizationStateManager: SynchronizationStateManager {
   }
 
   // MARK: - Private methods
+  private func updateFilteredLocalContents() {
+    trashedLocalContents = currentLocalContents.filter { $0.isRemoved }
+    notTrashedLocalContents = currentLocalContents.filter { !$0.isRemoved }
+  }
+
   private func updateFilteredCloudContents() {
     trashedCloudContents = currentCloudContents.filter { $0.isRemoved }
     notTrashedCloudContents = currentCloudContents.filter { !$0.isRemoved }
@@ -121,9 +133,8 @@ final class DefaultSynchronizationStateManager: SynchronizationStateManager {
   }
 
   private func resolveDidUpdateLocalContents(_ localContents: LocalContents) -> [OutgoingEvent] {
-    let itemsToRemoveFromCloudContainer = Self.getItemsToRemoveFromCloudContainer(currentLocalContents: currentLocalContents, 
-                                                                                  newLocalContents: localContents)
-    let itemsToCreateInCloudContainer = Self.getItemsToCreateInCloudContainer(notTrashedCloudContents: notTrashedCloudContents, 
+    let itemsToRemoveFromCloudContainer = Self.getItemsToRemoveFromCloudContainer(trashedLocalContents: trashedLocalContents, notTrashedCloudContents: notTrashedCloudContents)
+    let itemsToCreateInCloudContainer = Self.getItemsToCreateInCloudContainer(notTrashedCloudContents: notTrashedCloudContents,
                                                                               trashedCloudContents: trashedCloudContents,
                                                                               localContents: localContents)
     let itemsToUpdateInCloudContainer = Self.getItemsToUpdateInCloudContainer(notTrashedCloudContents: notTrashedCloudContents,
@@ -185,8 +196,9 @@ final class DefaultSynchronizationStateManager: SynchronizationStateManager {
     return itemsInInitialConflict.map { .resolveInitialSynchronizationConflict($0) }
   }
 
-  private static func getItemsToRemoveFromCloudContainer(currentLocalContents: LocalContents, newLocalContents: LocalContents) -> LocalContents {
-    currentLocalContents.filter { !newLocalContents.containsByName($0) }
+  private static func getItemsToRemoveFromCloudContainer(trashedLocalContents: LocalContents, notTrashedCloudContents: CloudContents) -> LocalContents {
+    // TODO: неправильно фильтруется если файл в треш папке локальный и файл в клауде имеют одно и тоже имя - такого быть не должно
+    trashedLocalContents.filter { notTrashedCloudContents.containsByName($0) }
   }
 
   private static func getItemsToCreateInCloudContainer(notTrashedCloudContents: CloudContents, trashedCloudContents: CloudContents, localContents: LocalContents) -> LocalContents {

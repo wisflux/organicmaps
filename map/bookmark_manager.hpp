@@ -380,6 +380,10 @@ public:
 
   BookmarkManager::KMLDataCollectionPtr GetRecentlyDeletedCategories();
 
+  using CompletionHandler = platform::SafeCallback<void()>;
+  void DeleteRecentlyDeletedCategoriesAtPaths(std::vector<std::string> const & filePaths, CompletionHandler && completionHandler);
+  void RecoverRecentlyDeletedCategoriesAtPaths(std::vector<std::string> const & filePaths);
+
   // Used for LoadBookmarks() and unit tests only. Does *not* update last modified time.
   void CreateCategories(KMLDataCollection && dataCollection, bool autoSave = false);
 
@@ -584,6 +588,8 @@ private:
   void SetCategoryAccessRules(kml::MarkGroupId categoryId, kml::AccessRules accessRules);
   void SetCategoryCustomProperty(kml::MarkGroupId categoryId, std::string const & key, std::string const & value);
   bool DeleteBmCategory(kml::MarkGroupId groupId);
+  void TrashFile(std::string const & filePath);
+  void RecoverFileFromTrash(std::string const & trashedFilePath);
   void ClearCategories();
 
   void MoveBookmark(kml::MarkId bmID, kml::MarkGroupId curGroupID, kml::MarkGroupId newGroupID);

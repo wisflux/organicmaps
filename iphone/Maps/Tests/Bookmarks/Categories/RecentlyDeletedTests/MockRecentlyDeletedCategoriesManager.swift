@@ -1,8 +1,8 @@
 class MockRecentlyDeletedCategoriesManager: NSObject, RecentlyDeletedCategoriesManager {
-  var categories = [RecentlyDeletedCategory]()
+  var categories = [RecentlyDeletedCellViewModel]()
 
-  func getRecentlyDeletedCategories() -> [URL] {
-    categories.map { $0.fileURL }
+  func getRecentlyDeletedCategories() -> [RecentlyDeletedCategory] {
+    []
   }
 
   func deleteRecentlyDeletedCategory(at urls: [URL]) {

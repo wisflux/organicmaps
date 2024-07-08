@@ -124,12 +124,12 @@ final class RecentlyDeletedCategoriesViewController: MWMTableViewController {
   }
 
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    viewModel.filteredDataSource[section].categories.count
+    viewModel.filteredDataSource[section].content.count
   }
 
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(cell: RecentlyDeletedTableViewCell.self, indexPath: indexPath)
-    let category = viewModel.filteredDataSource[indexPath.section].categories[indexPath.row]
+    let category = viewModel.filteredDataSource[indexPath.section].content[indexPath.row]
     cell.configureWith(category)
     return cell
   }

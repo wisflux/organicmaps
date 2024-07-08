@@ -414,6 +414,39 @@ BookmarkManager::KMLDataCollectionPtr BookmarkManager::GetRecentlyDeletedCategor
   return collection;
 }
 
+void BookmarkManager::DeleteRecentlyDeletedCategoriesAtPaths(std::vector<std::string> const & filePaths, CompletionHandler && completionHandler)
+{
+  CHECK_THREAD_CHECKER(m_threadChecker, ());
+  GetPlatform().RunTask(Platform::Thread::File, [this, filePaths, completionHandler]()
+  {
+    for (auto const & path : filePaths)
+      base::DeleteFileX(path);
+
+    GetPlatform().RunTask(Platform::Thread::Gui, [this, completionHandler]()
+    {
+      completionHandler();
+    });
+  });
+}
+
+void BookmarkManager::RecoverRecentlyDeletedCategoriesAtPaths(std::vector<std::string> const & trashedFilePaths)
+{
+  CHECK_THREAD_CHECKER(m_threadChecker, ());
+  GetPlatform().RunTask(Platform::Thread::File, [this, trashedFilePaths]()
+  {
+    for (auto const & trashedFilePath : trashedFilePaths)
+    {
+      ASSERT(Platform::IsFileExistsByFullPath(trashedFilePath), ("Trashed file should exist to be recovered.", trashedFilePath));
+      auto const filePath = GenerateValidAndUniqueFilePathForKML(base::FileNameFromFullPath(trashedFilePath));
+        FileWriter::MoveFileX(trashedFilePath, filePath);
+      GetPlatform().RunTask(Platform::Thread::Gui, [this, filePath]()
+      {
+        ReloadBookmark(filePath);
+      });
+    }
+  });
+}
+
 void BookmarkManager::DetachUserMark(kml::MarkId bmId, kml::MarkGroupId catId)
 {
   GetGroup(catId)->DetachUserMark(bmId);
@@ -2505,14 +2538,19 @@ bool BookmarkManager::DeleteBmCategory(kml::MarkGroupId groupId)
   ClearGroup(groupId);
   m_changesTracker.OnDeleteGroup(groupId);
 
-  auto const filePath = it->second->GetFileName();
-  auto const trashedFilePath = GenerateValidAndUniqueTrashedFilePath(base::FileNameFromFullPath(filePath));
-  FileWriter::MoveFileX(filePath, trashedFilePath);
+  TrashFile(it->second->GetFileName());
 
   DeleteCompilations(it->second->GetCategoryData().m_compilationIds);
   m_categories.erase(it);
   UpdateBmGroupIdList();
   return true;
+}
+
+void BookmarkManager::TrashFile(std::string const & filePath)
+{
+  CHECK_THREAD_CHECKER(m_threadChecker, ());
+  auto const trashedFilePath = GenerateValidAndUniqueTrashedFilePath(base::FileNameFromFullPath(filePath));
+  FileWriter::MoveFileX(filePath, trashedFilePath);
 }
 
 namespace

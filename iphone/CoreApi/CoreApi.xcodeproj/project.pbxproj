@@ -86,6 +86,9 @@
 		9974CA2A23DF1968003FE824 /* ElevationProfileData.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9974CA2823DF1968003FE824 /* ElevationProfileData.mm */; };
 		9974CA2D23DF197B003FE824 /* ElevationProfileData+Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 9974CA2B23DF197B003FE824 /* ElevationProfileData+Core.h */; };
 		AC6A585728057EF6003EABAF /* StringUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = AC6A585628057CC1003EABAF /* StringUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EDA5DD5F2C3BF50300DEE4B6 /* RecentlyDeletedCategory.mm in Sources */ = {isa = PBXBuildFile; fileRef = EDA5DD5E2C3BF50300DEE4B6 /* RecentlyDeletedCategory.mm */; };
+		EDA5DD602C3BF50300DEE4B6 /* RecentlyDeletedCategory.h in Headers */ = {isa = PBXBuildFile; fileRef = EDA5DD5D2C3BF50300DEE4B6 /* RecentlyDeletedCategory.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EDA5DD642C3C05EC00DEE4B6 /* RecentlyDeletedCategory+Core.h in Headers */ = {isa = PBXBuildFile; fileRef = EDA5DD612C3BF6CA00DEE4B6 /* RecentlyDeletedCategory+Core.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -175,6 +178,9 @@
 		9974CA2823DF1968003FE824 /* ElevationProfileData.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ElevationProfileData.mm; sourceTree = "<group>"; };
 		9974CA2B23DF197B003FE824 /* ElevationProfileData+Core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ElevationProfileData+Core.h"; sourceTree = "<group>"; };
 		AC6A585628057CC1003EABAF /* StringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringUtils.h; sourceTree = "<group>"; };
+		EDA5DD5D2C3BF50300DEE4B6 /* RecentlyDeletedCategory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RecentlyDeletedCategory.h; sourceTree = "<group>"; };
+		EDA5DD5E2C3BF50300DEE4B6 /* RecentlyDeletedCategory.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RecentlyDeletedCategory.mm; sourceTree = "<group>"; };
+		EDA5DD612C3BF6CA00DEE4B6 /* RecentlyDeletedCategory+Core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RecentlyDeletedCategory+Core.h"; sourceTree = "<group>"; };
 		FAA6D8CF29205D2D00E8D50D /* libcppjansson.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libcppjansson.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -338,6 +344,9 @@
 				47CA68E72506F61300671019 /* MWMTrack.mm */,
 				47F0D2132516847F00BC685E /* MWMBookmarksSection.h */,
 				47F0D2142516847F00BC685E /* MWMBookmarksSection.m */,
+				EDA5DD5D2C3BF50300DEE4B6 /* RecentlyDeletedCategory.h */,
+				EDA5DD612C3BF6CA00DEE4B6 /* RecentlyDeletedCategory+Core.h */,
+				EDA5DD5E2C3BF50300DEE4B6 /* RecentlyDeletedCategory.mm */,
 			);
 			path = Bookmarks;
 			sourceTree = "<group>";
@@ -452,8 +461,10 @@
 				479F7063234FBC5900011E2E /* MWMCarPlayBookmarkObject.h in Headers */,
 				47E8163723B188D3008FD836 /* MWMStorage.h in Headers */,
 				47EEAFF62350CF48005CF316 /* AppInfo.h in Headers */,
+				EDA5DD642C3C05EC00DEE4B6 /* RecentlyDeletedCategory+Core.h in Headers */,
 				47F701F3238C877C00D18E95 /* PlacePageButtonsData+Core.h in Headers */,
 				47CA68E12506C01F00671019 /* MWMBookmark+Core.h in Headers */,
+				EDA5DD602C3BF50300DEE4B6 /* RecentlyDeletedCategory.h in Headers */,
 				471527392491EDAA00E91BBA /* MWMBookmarkColor.h in Headers */,
 				47F4F1F923A3336C0022FD56 /* MWMMapNodeAttributes.h in Headers */,
 				479F704A234F785B00011E2E /* MWMTypes.h in Headers */,
@@ -502,6 +513,7 @@
 				TargetAttributes = {
 					470015EE2342509C00EBF03D = {
 						CreatedOnToolsVersion = 10.2;
+						LastSwiftMigration = 1540;
 					};
 				};
 			};
@@ -565,6 +577,7 @@
 				472602A924092C5B00731135 /* MWMGeoUtil.mm in Sources */,
 				47F701F0238C86F000D18E95 /* PlacePageButtonsData.mm in Sources */,
 				9940622123EAC57900493D1A /* ElevationHeightPoint.m in Sources */,
+				EDA5DD5F2C3BF50300DEE4B6 /* RecentlyDeletedCategory.mm in Sources */,
 				47EEAFF42350CEDB005CF316 /* AppInfo.mm in Sources */,
 				47E8163623B1889C008FD836 /* MWMStorage.mm in Sources */,
 				47CA68DE2502022400671019 /* MWMBookmark.mm in Sources */,
@@ -622,8 +635,10 @@
 		470015F82342509C00EBF03D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -639,14 +654,18 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
 		470015F92342509C00EBF03D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -662,6 +681,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
