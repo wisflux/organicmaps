@@ -1,6 +1,7 @@
 #include "map/framework.hpp"
 
 #include "map/benchmark_tools.hpp"
+#include "map/geo_element.hpp"
 #include "map/gps_tracker.hpp"
 #include "map/track_mark.hpp"
 #include "map/user_mark.hpp"
@@ -39,6 +40,7 @@
 #include "indexer/scales.hpp"
 #include "indexer/transliteration_loader.hpp"
 
+#include "platform/http_client.hpp"
 #include "platform/localization.hpp"
 #include "platform/measurement_utils.hpp"
 #include "platform/mwm_version.hpp"
@@ -47,6 +49,7 @@
 #include "platform/settings.hpp"
 
 #include "coding/point_coding.hpp"
+#include "coding/serdes_json.hpp"
 #include "coding/string_utf8_multilang.hpp"
 #include "coding/transliteration.hpp"
 #include "coding/url.hpp"
@@ -407,96 +410,74 @@ osm::EditableMapObject Framework::CreateGeoFeatureByMwmId(MwmSet::MwmId const & 
 
   return emo;
 }
+std::string createUrl(m2::RectD rect)
+{
+  // TODO: Get base url from config/enviroment
+  std::string baseUrl = "http://localhost:3000/api/geo-elements/published-transform-element-in-view-port?";
+  std::string southWestLng = "southWest[lng]=" + std::to_string(rect.minX());
+  std::string southWestLat = "&southWest[lat]=" + std::to_string(rect.minY());
+  std::string northEastLng = "&northEast[lng]=" + std::to_string(rect.maxX());
+  std::string northEastLat = "&northEast[lat]=" + std::to_string(rect.maxY());
+  std::string types = "&types[]=geoCircle&types[]=geoPath&types[]=geoRegion&types[]=geoMarker";
+
+  return baseUrl + southWestLng + southWestLat + northEastLng + northEastLat + types;
+}
 
 void Framework::CreateTestMapObjectIfNeeded(MwmSet::MwmId mwmId)
 {
-  /**
-   * TODO: Get the Poi's from the server and create the map objects.
-   * For now, we are creating the test objects.
-   */
-  std::vector<std::tuple<uint32_t, m2::PointD, std::string>> testObjects = {
-      {classif().GetTypeByPath({"amenity", "cafe"}), m2::PointD(mercator::FromLatLon(55.796128, 37.592476)),
-       "Test wisflux object 1"},
-      {classif().GetTypeByPath({"amenity", "atm"}), m2::PointD(mercator::FromLatLon(52.796128, 37.592476)),
-       "Test pankaj object 2"},
-      {classif().GetTypeByPath({"amenity", "place_of_worship"}), m2::PointD(mercator::FromLatLon(50.796128, 37.592476)),
-       "Test hardik object 3"},
-      {classif().GetTypeByPath({"amenity", "fast_food"}), m2::PointD(mercator::FromLatLon(48.796128, 37.592476)),
-       "Test kartik object 4"},
-  };
+  m2::RectD rect = mwmId.GetInfo()->m_bordersRect;
 
-  for (std::size_t i = 0; i < testObjects.size(); ++i)
+  std::string requestUrl = createUrl(rect);
+
+  platform::HttpClient request(requestUrl);
+  if (request.RunHttpRequest() && (request.ErrorCode() == 200 || request.ErrorCode() == 304))
   {
-    auto const & testObject = testObjects[i];
+    auto const & response = request.ServerResponse();
+    geo_elements::GeoElements geoElements;
     try
     {
-      uint32_t featurType = std::get<0>(testObject);
-      m2::PointD const point = std::get<1>(testObject);
-      std::string const name = std::get<2>(testObject);
+      coding::DeserializerJson des(response);
+      des(geoElements);
 
-      // Find the rect for the mwmId
-      m2::RectD rect = mwmId.GetInfo()->m_bordersRect;
-
-      if (rect.IsPointInside(point))
+      for (std::size_t i = 0; i < geoElements.size(); ++i)
       {
-        LOG(LINFO, ("test mwmId", mwmId));
+        auto const & element = geoElements[i];
 
-        auto testObject = CreateGeoFeatureByMwmId(mwmId, point, name, featurType, i + 1);
-        LOG(LINFO, ("Created test object"));
-        auto result = SaveEditedMapObject(testObject);
-        LOG(LINFO, ("Saved test object, result:", result, "id:", testObject.GetID()));
-        if (result == osm::Editor::SaveResult::SavedSuccessfully)
+        if (element.type == "geoMarker")
         {
-          LOG(LINFO, ("Test map object created successfully"));
-        }
-        else
-        {
-          LOG(LWARNING, ("Failed to save test map object, result:", result));
+          // TODO: Add feature type from API
+          uint32_t featurType = classif().GetTypeByPathSafe({"amenity", "cafe"});
+          LOG(LINFO, ("Feature Type ID:", featurType));
+          m2::PointD const point = m2::PointD(mercator::FromLatLon(element.position.lat, element.position.lng));
+          std::string const name = element.title;
+
+          auto testObject = CreateGeoFeatureByMwmId(mwmId, point, name, featurType, i + 1);
+          LOG(LINFO, ("Created test object"));
+
+          auto result = SaveEditedMapObject(testObject);
+          LOG(LINFO, ("Saved test object, result:", result, "id:", testObject.GetID()));
+
+          if (result == osm::Editor::SaveResult::SavedSuccessfully)
+          {
+            LOG(LINFO, ("Test map object created successfully"));
+          }
+          else
+          {
+            LOG(LWARNING, ("Failed to save test map object, result:", result));
+          }
         }
       }
     }
-    catch (std::exception const & e)
+    catch (coding::DeserializerJson::Exception const & e)
     {
-      LOG(LERROR, ("Exception while creating test map object:", e.what()));
+      LOG(LERROR, ("Error deserializing JSON:", e.what()));
     }
   }
-
-  // try
-  // {
-  //   uint32_t featurType = classif().GetTypeByPath({"amenity", "cafe"});
-  //   m2::PointD const point(mercator::FromLatLon(55.796128, 37.592476));
-  //   // Find a valid MwmId for the point
-  //   MwmSet::MwmId mwmId;
-  //   m_featuresFetcher.GetDataSource().ForEachInRect(
-  //       [&](FeatureType & ft)
-  //       {
-  //         if (!mwmId.IsAlive())
-  //         {
-  //           // Use the MwmId of the first feature we find
-  //           mwmId = ft.GetID().m_mwmId;
-  //         }
-  //       },
-  //       mercator::RectByCenterXYAndSizeInMeters(point, 1), scales::GetUpperScale());
-
-  //   LOG(LINFO, ("test mwmId", mwmId));
-
-  //   auto testObject = CreateGeoFeatureByMwmId(mwmId, point, "Test object", featurType);
-  //   LOG(LINFO, ("Created test object"));
-  //   auto result = SaveEditedMapObject(testObject);
-  //   LOG(LINFO, ("Saved test object, result:", result, "id:", testObject.GetID()));
-  //   if (result == osm::Editor::SaveResult::SavedSuccessfully)
-  //   {
-  //     LOG(LINFO, ("Test map object created successfully"));
-  //   }
-  //   else
-  //   {
-  //     LOG(LWARNING, ("Failed to save test map object, result:", result));
-  //   }
-  // }
-  // catch (std::exception const & e)
-  // {
-  //   LOG(LERROR, ("Exception while creating test map object:", e.what()));
-  // }
+  else
+  {
+    LOG(LWARNING, ("Failed to get response from server:", request.ErrorCode(), request.WasRedirected(),
+                   request.ServerResponse()));
+  }
 }
 
 void Framework::ShowNode(storage::CountryId const & countryId)
