@@ -14,14 +14,15 @@
 #import "NSDate+TimeDistance.h"
 #import "SwiftBridge.h"
 
+#import <FirebaseCore/FirebaseCore.h>;
+#import <FirebaseMessaging/FirebaseMessaging.h>;
+#import <UserNotifications/UserNotifications.h>;
 
 #import <CarPlay/CarPlay.h>
-#import <CoreSpotlight/CoreSpotlight.h>
-#import <CoreTelephony/CTTelephonyNetworkInfo.h>
-#import <UserNotifications/UserNotifications.h>
-
 #import <CoreApi/Framework.h>
 #import <CoreApi/MWMFrameworkHelper.h>
+#import <CoreSpotlight/CoreSpotlight.h>
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
 
 #include "map/gps_tracker.hpp"
 
@@ -61,8 +62,7 @@ void InitLocalizedStrings() {
 
 using namespace osm_auth_ios;
 
-@interface MapsAppDelegate () <MWMStorageObserver,
-                               CPApplicationDelegate>
+@interface MapsAppDelegate () <MWMStorageObserver, CPApplicationDelegate>
 
 @property(nonatomic) NSInteger standbyCounter;
 @property(nonatomic) MWMBackgroundFetchScheduler *backgroundFetchScheduler;
@@ -108,12 +108,23 @@ using namespace osm_auth_ios;
   NSLog(@"application:didFinishLaunchingWithOptions: %@", launchOptions);
 
   [HttpThreadImpl setDownloadIndicatorProtocol:self];
+  [FIRApp configure];
+
+  [application registerForRemoteNotifications];
 
   InitLocalizedStrings();
   [MWMThemeManager invalidate];
-
   [self commonInit];
-
+  [UNUserNotificationCenter currentNotificationCenter].delegate = self;
+  UNAuthorizationOptions authOptions =
+    UNAuthorizationOptionAlert | UNAuthorizationOptionSound | UNAuthorizationOptionBadge;
+  [[UNUserNotificationCenter currentNotificationCenter]
+    requestAuthorizationWithOptions:authOptions
+                  completionHandler:^(BOOL granted, NSError *_Nullable error) {
+                    LOG(LINFO, ("Firebase Messaging intitialized", granted));
+                  }];
+  [application registerForRemoteNotifications];
+  [FIRMessaging messaging].delegate = self;
   if ([FirstSession isFirstSession]) {
     [self firstLaunchSetup];
   } else {
@@ -123,10 +134,26 @@ using namespace osm_auth_ios;
 
   if (![MapsAppDelegate isTestsEnvironment])
     [[CloudStorageManager shared] start];
-  
+
   [[DeepLinkHandler shared] applicationDidFinishLaunching:launchOptions];
+
   // application:openUrl:options is called later for deep links if YES is returned.
   return YES;
+}
+- (void)messaging:(FIRMessaging *)messaging didReceiveRegistrationToken:(NSString *)fcmToken {
+  NSLog(@"FCM registration token: %@", fcmToken);
+  // Notify about received token.
+  NSDictionary *dataDict = [NSDictionary dictionaryWithObject:fcmToken forKey:@"token"];
+  [[NSNotificationCenter defaultCenter] postNotificationName:@"FCMToken" object:nil userInfo:dataDict];
+  // TODO: If necessary send token to application server.
+  // Note: This callback is fired at each app startup and whenever a new token is generated.
+  [[FIRMessaging messaging] tokenWithCompletion:^(NSString *token, NSError *error) {
+    if (error != nil) {
+      NSLog(@"Error getting FCM registration token: %@", error);
+    } else {
+      NSLog(@"FCM registration token: %@", token);
+    }
+  }];
 }
 
 - (void)application:(UIApplication *)application
@@ -134,6 +161,23 @@ using namespace osm_auth_ios;
              completionHandler:(void (^)(BOOL))completionHandler {
   [self.mapViewController performAction:shortcutItem.type];
   completionHandler(YES);
+}
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+       willPresentNotification:(UNNotification *)notification
+         withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
+  NSDictionary *userInfo = notification.request.content.userInfo;
+
+  // With swizzling disabled you must let Messaging know about the message, for Analytics
+  // [[FIRMessaging messaging] appDidReceiveMessage:userInfo];
+
+  // ...
+
+  // Print full message.
+  NSLog(@"%@", userInfo);
+
+  // Change this to your preferred presentation option
+  completionHandler(UNNotificationPresentationOptionBadge | UNNotificationPresentationOptionAlert);
 }
 
 - (void)runBackgroundTasks:(NSArray<BackgroundFetchTask *> *_Nonnull)tasks
@@ -210,7 +254,7 @@ using namespace osm_auth_ios;
 - (void)applicationDidBecomeActive:(UIApplication *)application {
   LOG(LINFO, ("applicationDidBecomeActive - begin"));
 
-  auto & f = GetFramework();
+  auto &f = GetFramework();
   f.EnterForeground();
   [self.mapViewController onGetFocus:YES];
   f.SetRenderingEnabled();
@@ -228,10 +272,11 @@ using namespace osm_auth_ios;
   LOG(LINFO, ("applicationDidBecomeActive - end"));
 }
 
-// TODO: Drape enabling and iCloud sync are skipped during the test run due to the app crashing in teardown. This is a temporary solution. Drape should be properly disabled instead of merely skipping the enabling process.
+// TODO: Drape enabling and iCloud sync are skipped during the test run due to the app crashing in teardown. This is a
+// temporary solution. Drape should be properly disabled instead of merely skipping the enabling process.
 + (BOOL)isTestsEnvironment {
-  NSProcessInfo * processInfo = [NSProcessInfo processInfo];
-  NSArray<NSString *> * launchArguments = [processInfo arguments];
+  NSProcessInfo *processInfo = [NSProcessInfo processInfo];
+  NSArray<NSString *> *launchArguments = [processInfo arguments];
   BOOL isTests = [launchArguments containsObject:@"-IsTests"];
   return isTests;
 }
@@ -414,7 +459,7 @@ using namespace osm_auth_ios;
 
 - (void)application:(UIApplication *)application
   didConnectCarInterfaceController:(CPInterfaceController *)interfaceController
-           toWindow:(CPWindow *)window API_AVAILABLE(ios(12.0)) {
+                          toWindow:(CPWindow *)window API_AVAILABLE(ios(12.0)) {
   [self.carplayService setupWithWindow:window interfaceController:interfaceController];
 }
 
