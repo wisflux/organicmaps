@@ -3163,3 +3163,48 @@ void Framework::OnPowerSchemeChanged(power_management::Scheme const actualScheme
   if (actualScheme == power_management::Scheme::EconomyMaximum && GetTrafficManager().IsEnabled())
     GetTrafficManager().SetEnabled(false);
 }
+
+string BuildPostRequest(std::initializer_list<std::pair<string, string>> const & params)
+{
+  string result;
+  for (auto it = params.begin(); it != params.end(); ++it)
+  {
+    if (it != params.begin())
+      result += "&";
+    result += it->first + "=" + url::UrlEncode(it->second);
+  }
+  return result;
+}
+
+void Framework::HandleDeviceToken(std::string const & deviceToken)
+{
+  LOG(LINFO, ("Received device token:", deviceToken));
+  return;
+  auto points = GetCurrentPosition();
+  if (!points)
+  {
+    LOG(LERROR, ("Failed to get current position"));
+    return;
+  }
+
+  // Send the device token and current lot,lng to the server
+
+  // Example URL - replace with your server's URL
+  std::string serverUrl = "http://localhost:3000/api/device";
+  platform::HttpClient request(serverUrl);
+  auto params = BuildPostRequest({
+      {"deviceId", deviceToken},
+      {"lat", std::to_string(points->y)},
+      {"lng", std::to_string(points->x)},
+  });
+  request.SetBodyData(params, "application/x-www-form-urlencoded");
+  request.SetHttpMethod("POST");
+  if (request.RunHttpRequest() && (request.ErrorCode() == 200 || request.ErrorCode() == 304))
+  {
+    LOG(LINFO, ("Device token sent successfully"));
+  }
+  else
+  {
+    LOG(LINFO, ("Failed to send device token"));
+  }
+}

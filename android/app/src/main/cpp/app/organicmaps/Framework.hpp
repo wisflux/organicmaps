@@ -142,7 +142,7 @@ namespace android
     void Scroll(double distanceX, double distanceY);
 
     void Touch(int action, Finger const & f1, Finger const & f2, uint8_t maskedPointer);
-
+    void SendDeviceToken(std::string const & token);
     bool Search(search::EverywhereSearchParams const & params);
     std::string GetLastSearchQuery() { return m_searchQuery; }
     void ClearLastSearchQuery() { m_searchQuery.clear(); }

@@ -24,9 +24,9 @@ buildscript {
   dependencies {
     classpath 'com.android.tools.build:gradle:8.4.1'
 
-    if (googleFirebaseServicesEnabled) {
-      println('Building with Google Firebase Services')
       classpath 'com.google.gms:google-services:4.4.1'
+      println('Building with Google Firebase Services')
+    if (googleFirebaseServicesEnabled) {
       classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.9'
       classpath 'com.google.firebase:firebase-appdistribution-gradle:4.2.0'
     } else {
@@ -46,8 +46,8 @@ repositories {
 
 apply plugin: 'com.android.application'
 apply from: 'secure.properties'
-if (googleFirebaseServicesEnabled) {
   apply plugin: 'com.google.gms.google-services'
+if (googleFirebaseServicesEnabled) {
   apply plugin: 'com.google.firebase.crashlytics'
   apply plugin: 'com.google.firebase.appdistribution'
 }
@@ -82,7 +82,7 @@ def getCommitMessage() {
 def osName = System.properties['os.name'].toLowerCase()
 
 project.ext.appId = 'app.organicmaps'
-project.ext.appName = 'Organic Maps'
+project.ext.appName = 'DRIMS'
 
 java {
   toolchain {
@@ -347,6 +347,7 @@ android {
 }
 
 dependencies {
+  implementation 'com.google.firebase:firebase-messaging:24.0.0'
   coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
 
   // Google Play Location Services
@@ -361,16 +362,17 @@ dependencies {
   webImplementation 'com.google.android.gms:play-services-location:21.2.0'
   googleImplementation 'com.google.android.gms:play-services-location:21.2.0'
   huaweiImplementation 'com.google.android.gms:play-services-location:21.2.0'
-
+  implementation platform('com.google.firebase:firebase-bom:33.1.2')
   // Google Firebase Services
   if (googleFirebaseServicesEnabled) {
     // Import the BoM for the Firebase platform
-    implementation platform('com.google.firebase:firebase-bom:32.8.0')
+
     // Add the dependencies for the Crashlytics and Analytics libraries
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-crashlytics-ndk'
   }
+  implementation 'com.google.firebase:firebase-messaging'
 
   // This line is added as a workaround for duplicate classes error caused by some outdated dependency:
   // > A failure occurred while executing com.android.build.gradle.internal.tasks.CheckDuplicatesRunnable

@@ -230,6 +230,7 @@ public:
                                                  std::string const & name, uint32_t featureType, uint32_t index) const;
 
   void CreateTestMapObjectIfNeeded(MwmSet::MwmId id);
+  void HandleDeviceToken(std::string const & deviceToken);
 
   df::DrapeApi & GetDrapeApi() { return m_drapeApi; }
 
