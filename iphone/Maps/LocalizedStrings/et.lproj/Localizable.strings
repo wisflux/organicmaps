@@ -51,16 +51,13 @@
 "country_status_download_failed" = "Allalaadimine ebaõnnestus";
 
 /* Text in About screen */
-"about_headline" = "Free for everyone, made with love";
+"about_headline" = "Disaster Response Information Management System (DRIMS)";
 
 /* Text in About screen */
-"about_proposition_1" = "• No ads, no tracking, no data collection";
+"about_proposition_1" = "• No ads, no tracking";
 
 /* Text in About screen */
 "about_proposition_2" = "• Ei tühjenda akut, töötab võrguühenduseta";
-
-/* Text in About screen */
-"about_proposition_3" = "• Kiire, minimalistlik, kogukonna poolt välja töötatud";
 
 "close" = "Sulge";
 

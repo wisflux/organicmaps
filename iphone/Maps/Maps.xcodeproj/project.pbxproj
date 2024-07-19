@@ -4835,7 +4835,7 @@
 				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_TEAM = 2938MAXZZT;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_KEY_CFBundleDisplayName = "Organic Maps (Debug)";
+				INFOPLIST_KEY_CFBundleDisplayName = DRIMS;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = NO;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Determining your location is necessary for navigation and for saving your recently travelled track.";
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -4864,7 +4864,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 2938MAXZZT;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_KEY_CFBundleDisplayName = "Organic Maps (Debug)";
+				INFOPLIST_KEY_CFBundleDisplayName = DRIMS;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = NO;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Determining your location is necessary for navigation and for saving your recently travelled track.";
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;

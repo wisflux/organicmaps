@@ -51,16 +51,14 @@
 "country_status_download_failed" = "La baixada ha fallat";
 
 /* Text in About screen */
-"about_headline" = "Free for everyone, made with love";
+"about_headline" = "Disaster Response Information Management System (DRIMS)";
 
 /* Text in About screen */
-"about_proposition_1" = "• No ads, no tracking, no data collection";
+"about_proposition_1" = "• No ads, no tracking";
 
 /* Text in About screen */
 "about_proposition_2" = "• Sense consum de bateria, funciona fora de línia";
 
-/* Text in About screen */
-"about_proposition_3" = "• Ràpid, minimalista, desenvolupat per la comunitat";
 
 "close" = "Tanca";
 

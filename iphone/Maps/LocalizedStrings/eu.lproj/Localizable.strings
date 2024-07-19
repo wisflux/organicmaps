@@ -59,9 +59,6 @@
 /* Text in About screen */
 "about_proposition_2" = "• Ez da bateria deskargatzen, konexiorik gabe funtzionatzen du";
 
-/* Text in About screen */
-"about_proposition_3" = "• Azkarra, minimalista, komunitateak garatua";
-
 "close" = "Itxi";
 
 "download" = "Deskargatu";

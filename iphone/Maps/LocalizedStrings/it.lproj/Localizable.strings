@@ -59,9 +59,6 @@
 /* Text in About screen */
 "about_proposition_2" = "• Non consuma la batteria, funziona anche offline";
 
-/* Text in About screen */
-"about_proposition_3" = "• Veloce, minimalista, sviluppato dalla comunità";
-
 "close" = "Chiudi";
 
 "download" = "Scarica";

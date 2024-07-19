@@ -59,9 +59,6 @@
 /* Text in About screen */
 "about_proposition_2" = "• Не розряджає батарею, працює в автономному режимі";
 
-/* Text in About screen */
-"about_proposition_3" = "• Швидкий, мінімалістичний, розроблений спільнотою";
-
 "close" = "Закрити";
 
 "download" = "Завантажити";

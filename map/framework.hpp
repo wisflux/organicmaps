@@ -396,6 +396,13 @@ public:
   void SwitchMyPositionNextMode();
   /// Should be set before Drape initialization. Guarantees that fn is called in main thread context.
   void SetMyPositionModeListener(location::TMyPositionModeChanged && fn);
+  void StoreFcmToken(std::string const & token) { GetPlatform().GetSecureStorage().Save("fcmToken", token); };
+  std::string GetFcmToken()
+  {
+    std::string token;
+    GetPlatform().GetSecureStorage().Load("fcmToken", token);
+    return token;
+  };
 
   location::EMyPositionMode GetMyPositionMode() const;
 

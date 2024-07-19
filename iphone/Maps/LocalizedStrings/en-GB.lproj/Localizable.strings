@@ -51,16 +51,13 @@
 "country_status_download_failed" = "Download has failed";
 
 /* Text in About screen */
-"about_headline" = "Free for everyone, made with love";
+"about_headline" = "Disaster Response Information Management System (DRIMS)";
 
 /* Text in About screen */
-"about_proposition_1" = "• No ads, no tracking, no data collection";
+"about_proposition_1" = "• No ads, no tracking";
 
 /* Text in About screen */
 "about_proposition_2" = "• No battery drain, works offline";
-
-/* Text in About screen */
-"about_proposition_3" = "• Fast, minimalist, developed by community";
 
 "close" = "Close";
 
@@ -171,7 +168,7 @@
 
 /********** Other translations **********/
 
-"share_bookmarks_email_body" = "Hello!\n\nAttached are my bookmarks; please open them in Organic Maps. If you don't have it installed you can download it here: https://omaps.app/get?kmz\n\nEnjoy travelling with Organic Maps!";
+"share_bookmarks_email_body" = "Hello!\n\nAttached are my bookmarks; please open them in DRIMS. If you don't have it installed you can download it here: https://omaps.app/get?kmz\n\nEnjoy travelling with DRIMS!";
 
 /* message title of loading file */
 "load_kmz_title" = "Loading Bookmarks";
@@ -189,10 +186,10 @@
 "unknown_current_position" = "Your location hasn't been determined yet";
 
 /* Subject for emailed bookmark */
-"bookmark_share_email_subject" = "Hey, check out my pin in Organic Maps!";
+"bookmark_share_email_subject" = "Hey, check out my pin in DRIMS!";
 
 /* Subject for emailed position */
-"my_position_share_email_subject" = "Hey, check out my current location on the Organic Maps map!";
+"my_position_share_email_subject" = "Hey, check out my current location on the DRIMS map!";
 
 /* Share button text which opens menu with more buttons, like Message, EMail, Facebook etc. */
 "share" = "Share";
@@ -210,7 +207,7 @@
 "done" = "Done";
 
 /* Prints version number in About dialog */
-"version" = "Organic Maps version: %@";
+"version" = "DRIMS";
 
 /* Title for tracks category in bookmarks manager */
 "tracks_title" = "Tracks";
@@ -295,7 +292,7 @@
 /* Text in menu */
 "website" = "Website";
 
-/* Text in About menu, opens Organic Maps news website */
+/* Text in About menu, opens DRIMS news website */
 "news" = "News";
 
 /* Text in menu */
@@ -734,7 +731,7 @@
 /* Error dialog no space */
 "migration_no_space_message" = "To download, you need more space. Please delete any unnecessary data.";
 
-"editor_sharing_title" = "I improved the Organic Maps maps";
+"editor_sharing_title" = "I improved the DRIMS maps";
 
 /* Downloaded 10 **of** 20 <- it is that "of" */
 "downloader_of" = "%1$d of %2$d";
@@ -761,7 +758,7 @@
 
 "editor_detailed_description_hint" = "Detailed comment";
 
-"editor_detailed_description" = "Your suggested map changes will be sent to the OpenStreetMap community. Please describe any additional details that cannot be edited in Organic Maps.";
+"editor_detailed_description" = "Your suggested map changes will be sent to the OpenStreetMap community. Please describe any additional details that cannot be edited in DRIMS.";
 
 "editor_more_about_osm" = "More about OpenStreetMap";
 
@@ -792,7 +789,7 @@
 
 "location_services_disabled_on_device_4" = "4. Turn on Location Services";
 
-"location_services_disabled_on_device_additional_message" = "Or continue using Organic Maps without Location";
+"location_services_disabled_on_device_additional_message" = "Or continue using DRIMS without Location";
 
 /* abbreviation for meters */
 "m" = "m";
@@ -823,7 +820,7 @@
 "more_on_kayak" = "Photos, reviews, booking";
 
 /* An explanation dialog shown when clicking on more_on_kayak link. */
-"dialog_kayak_disclaimer" = "The referral bonus received for each booking through this link goes towards the development of Organic Maps.";
+"dialog_kayak_disclaimer" = "The referral bonus received for each booking through this link goes towards the development of DRIMS.";
 
 /* A confirmation button text in the explanation dialog that opens hotel details page on Kayak website. */
 "dialog_kayak_button" = "Details on Kayak";
@@ -883,7 +880,7 @@
 /* For sharing via SMS and so on */
 "sharing_call_action_look" = "Check out";
 
-"recent_track_background_dialog_message" = "Organic Maps uses your location in the background to record your recently travelled route.";
+"recent_track_background_dialog_message" = "DRIMS uses your location in the background to record your recently travelled route.";
 
 "general_settings" = "General settings";
 
@@ -992,7 +989,7 @@
 
 "bookmarks_error_title_list_name_too_long" = "This name is too long";
 
-"profile" = "OpenStreetMap profile";
+"profile" = "DRIMS profile";
 
 "bookmarks_detect_title" = "New files detected";
 
@@ -1270,7 +1267,7 @@
 /* Instagram account url for the "?" About page */
 "instagram_url" = "https://www.instagram.com/organicmaps.app";
 
-/* Translated Organic Maps site, add new translations here: https://github.com/organicmaps/organicmaps.github.io/tree/master/content */
+/* Translated DRIMS site, add new translations here: https://github.com/organicmaps/organicmaps.github.io/tree/master/content */
 "translated_om_site_url" = "https://organicmaps.app/";
 
 /* Link to OSM wiki for Editor, Profile and About pages */
@@ -1307,10 +1304,10 @@
 "app_tip_09" = "Our main goal is to build fast, privacy-focused, easy-to-use maps that you will love.";
 
 /* Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen */
-"car_used_on_the_phone_screen" = "You are now using Organic Maps on the phone screen";
+"car_used_on_the_phone_screen" = "You are now using DRIMS on the phone screen";
 
 /* Text on the phone placeholder screen that maps are displayed on the car screen */
-"car_used_on_the_car_screen" = "You are now using Organic Maps on the car screen";
+"car_used_on_the_car_screen" = "You are now using DRIMS on the car screen";
 
 /* Displayed on the phone screen. Button to display maps on the phone screen instead of a car */
 "car_continue_on_the_phone" = "Continue on the phone";

@@ -59,9 +59,6 @@
 /* Text in About screen */
 "about_proposition_2" = "• कोई बैटरी ख़त्म नहीं, ऑफ़लाइन काम करता है";
 
-/* Text in About screen */
-"about_proposition_3" = "• तेज़, न्यूनतम, समुदाय द्वारा विकसित";
-
 "close" = "बंद करना";
 
 "download" = "डाउन लोड करना";

@@ -2,7 +2,7 @@ protocol BottomMenuInteractorProtocol: AnyObject {
   func close()
   func addPlace()
   func downloadMaps()
-  func donate()
+  // func donate()
   func openSettings()
   func shareLocation(cell: BottomMenuItemCell)
 }

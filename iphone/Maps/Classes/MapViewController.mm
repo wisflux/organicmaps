@@ -342,6 +342,17 @@ NSString *const kPP2BookmarkEditingSegue = @"PP2BookmarkEditing";
         MWMMyPositionModeNotFollowNoPosition : MWMMyPositionModePendingPosition];
   }
 
+
+
+  // [[FIRMessaging messaging] tokenWithCompletion:^(NSString *token, NSError *error) {
+  //   if (error != nil) {
+  //     NSLog(@"Error getting FCM registration token: %@", error);
+  //   } else {
+  //     NSLog(@"FCM registration token: %@", token);
+      GetFramework().HandleDeviceToken(GetFramework().GetFcmToken());
+  //   }
+  // }];
+
   if ([MWMNavigationDashboardManager sharedManager].state == MWMNavigationDashboardStateHidden)
     self.controlsManager.menuState = self.controlsManager.menuRestoreState;
   
@@ -365,6 +376,8 @@ NSString *const kPP2BookmarkEditingSegue = @"PP2BookmarkEditing";
     }
   }
   */
+
+  // Note: This callback is fired at each app startup and whenever a new token is generated.
 }
 
 - (void)viewDidAppear:(BOOL)animated {

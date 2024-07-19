@@ -3179,18 +3179,17 @@ string BuildPostRequest(std::initializer_list<std::pair<string, string>> const &
 void Framework::HandleDeviceToken(std::string const & deviceToken)
 {
   LOG(LINFO, ("Received device token:", deviceToken));
-  return;
   auto points = GetCurrentPosition();
   if (!points)
   {
-    LOG(LERROR, ("Failed to get current position"));
+    LOG(LINFO, ("Failed to get current position"));
     return;
   }
 
   // Send the device token and current lot,lng to the server
 
   // Example URL - replace with your server's URL
-  std::string serverUrl = "http://localhost:3000/api/device";
+  std::string serverUrl = "http://192.168.0.166:3000/api/device";
   platform::HttpClient request(serverUrl);
   auto params = BuildPostRequest({
       {"deviceId", deviceToken},

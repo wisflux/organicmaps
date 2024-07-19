@@ -26,14 +26,14 @@ final class AboutController: MWMViewController {
   private let logoImageView = UIImageView()
   private let headerTitleLabel = UILabel()
   private let additionalInfoStackView = UIStackView()
-  private let donationView = DonationView()
-  private let osmView = OSMView()
+  // private let donationView = DonationView()
+  // private let osmView = OSMView()
   private let infoTableView = UITableView(frame: .zero, style: .plain)
   private var infoTableViewHeightAnchor: NSLayoutConstraint?
-  private let socialMediaHeaderLabel = UILabel()
-  private let socialMediaCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-  private lazy var socialMediaCollectionViewHeighConstraint = socialMediaCollectionView.heightAnchor.constraint(equalToConstant: .zero)
-  private let termsOfUseAndPrivacyPolicyView = ButtonsStackView()
+  // private let socialMediaHeaderLabel = UILabel()
+  // private let socialMediaCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+  // private lazy var socialMediaCollectionViewHeighConstraint = socialMediaCollectionView.heightAnchor.constraint(equalToConstant: .zero)
+  // private let termsOfUseAndPrivacyPolicyView = ButtonsStackView()
   private var infoTableViewData = [AboutInfoTableViewCellModel]()
   private var socialMediaCollectionViewData = [SocialMediaCollectionViewCellModel]()
   private var onDidAppearCompletionHandler: (() -> Void)?
@@ -58,7 +58,7 @@ final class AboutController: MWMViewController {
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    updateCollection()
+    // updateCollection()
   }
 
   override func viewDidAppear(_ animated: Bool) {
@@ -71,7 +71,7 @@ final class AboutController: MWMViewController {
 
   override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
     super.traitCollectionDidChange(previousTraitCollection)
-    updateCollection()
+    // updateCollection()
   }
 }
 
@@ -80,7 +80,7 @@ private extension AboutController {
   func setupViews() {
     func setupTitle() {
       let titleView = UILabel()
-      titleView.text = Self.formattedAppVersion()
+      titleView.text = formattedAppVersion()
       titleView.textColor = .white
       titleView.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
       titleView.isUserInteractionEnabled = true
@@ -112,32 +112,32 @@ private extension AboutController {
       headerTitleLabel.setStyleAndApply("semibold18:blackPrimaryText")
       headerTitleLabel.text = L("about_headline")
       headerTitleLabel.textAlignment = .center
-      headerTitleLabel.numberOfLines = 1
+      headerTitleLabel.numberOfLines = 2
       headerTitleLabel.allowsDefaultTighteningForTruncation = true
       headerTitleLabel.adjustsFontSizeToFitWidth = true
-      headerTitleLabel.minimumScaleFactor = 0.5
+      headerTitleLabel.minimumScaleFactor = 2
     }
 
     func setupAdditionalInfo() {
       additionalInfoStackView.axis = .vertical
       additionalInfoStackView.spacing = 15
 
-      [AboutInfo.noTracking, .noWifi, .community].forEach({ additionalInfoStackView.addArrangedSubview(InfoView(image: nil, title: $0.title)) })
+      [AboutInfo.noWifi].forEach({ additionalInfoStackView.addArrangedSubview(InfoView(image: nil, title: $0.title)) })
     }
 
-    func setupDonation() {
-      donationView.donateButtonDidTapHandler = { [weak self] in
-        guard let self else { return }
-        self.openUrl(self.isDonateEnabled() ? Settings.donateUrl() : L("translated_om_site_url") + "support-us/")
-      }
-    }
+    // func setupDonation() {
+    //   donationView.donateButtonDidTapHandler = { [weak self] in
+    //     guard let self else { return }
+    //     self.openUrl(self.isDonateEnabled() ? Settings.donateUrl() : L("translated_om_site_url") + "support-us/")
+    //   }
+    // }
 
-    func setupOSM() {
-      osmView.setMapDate(Self.formattedMapsDataVersion())
-      osmView.didTapHandler = { [weak self] in
-        self?.openUrl("https://www.openstreetmap.org/")
-      }
-    }
+    // func setupOSM() {
+    //   osmView.setMapDate(formattedMapsDataVersion())
+    //   osmView.didTapHandler = { [weak self] in
+    //     self?.openUrl("https://www.openstreetmap.org/")
+    //   }
+    // }
 
     func setupInfoTable() {
       infoTableView.setStyleAndApply("ClearBackground")
@@ -150,32 +150,32 @@ private extension AboutController {
       infoTableView.register(cell: InfoTableViewCell.self)
     }
 
-    func setupSocialMediaCollection() {
-      socialMediaHeaderLabel.setStyleAndApply("regular16:blackPrimaryText")
-      socialMediaHeaderLabel.text = L("follow_us")
-      socialMediaHeaderLabel.numberOfLines = 1
-      socialMediaHeaderLabel.allowsDefaultTighteningForTruncation = true
-      socialMediaHeaderLabel.adjustsFontSizeToFitWidth = true
-      socialMediaHeaderLabel.minimumScaleFactor = 0.5
+    // func setupSocialMediaCollection() {
+    //   socialMediaHeaderLabel.setStyleAndApply("regular16:blackPrimaryText")
+    //   socialMediaHeaderLabel.text = L("follow_us")
+    //   socialMediaHeaderLabel.numberOfLines = 1
+    //   socialMediaHeaderLabel.allowsDefaultTighteningForTruncation = true
+    //   socialMediaHeaderLabel.adjustsFontSizeToFitWidth = true
+    //   socialMediaHeaderLabel.minimumScaleFactor = 0.5
 
-      socialMediaCollectionView.backgroundColor = .clear
-      socialMediaCollectionView.isScrollEnabled = false
-      socialMediaCollectionView.dataSource = self
-      socialMediaCollectionView.delegate = self
-      socialMediaCollectionView.register(cell: SocialMediaCollectionViewCell.self)
-    }
+    //   socialMediaCollectionView.backgroundColor = .clear
+    //   socialMediaCollectionView.isScrollEnabled = false
+    //   socialMediaCollectionView.dataSource = self
+    //   socialMediaCollectionView.delegate = self
+    //   socialMediaCollectionView.register(cell: SocialMediaCollectionViewCell.self)
+    // }
 
-    func setupTermsAndPrivacy() {
-      termsOfUseAndPrivacyPolicyView.addButton(title: L("privacy_policy"), didTapHandler: { [weak self] in
-        self?.openUrl(L("translated_om_site_url") + "privacy/")
-      })
-      termsOfUseAndPrivacyPolicyView.addButton(title: L("terms_of_use"), didTapHandler: { [weak self] in
-        self?.openUrl(L("translated_om_site_url") + "terms/")
-      })
-      termsOfUseAndPrivacyPolicyView.addButton(title: L("copyright"), didTapHandler: { [weak self] in
-        self?.showCopyright()
-      })
-    }
+    // func setupTermsAndPrivacy() {
+    //   termsOfUseAndPrivacyPolicyView.addButton(title: L("privacy_policy"), didTapHandler: { [weak self] in
+    //     self?.openUrl(L("translated_om_site_url") + "privacy/")
+    //   })
+    //   termsOfUseAndPrivacyPolicyView.addButton(title: L("terms_of_use"), didTapHandler: { [weak self] in
+    //     self?.openUrl(L("translated_om_site_url") + "terms/")
+    //   })
+    //   termsOfUseAndPrivacyPolicyView.addButton(title: L("copyright"), didTapHandler: { [weak self] in
+    //     self?.showCopyright()
+    //   })
+    // }
 
     view.setStyleAndApply("PressBackground")
     
@@ -184,11 +184,11 @@ private extension AboutController {
     setupLogo()
     setupHeaderTitle()
     setupAdditionalInfo()
-    setupDonation()
-    setupOSM()
+    // setupDonation()
+    // setupOSM()
     setupInfoTable()
-    setupSocialMediaCollection()
-    setupTermsAndPrivacy()
+    // setupSocialMediaCollection()
+    // setupTermsAndPrivacy()
 
     infoTableViewData = buildInfoTableViewData()
     socialMediaCollectionViewData = buildSocialMediaCollectionViewData()
@@ -200,14 +200,14 @@ private extension AboutController {
     stackView.addArrangedSubview(logoImageView)
     stackView.addArrangedSubview(headerTitleLabel)
     stackView.addArrangedSubviewWithSeparator(additionalInfoStackView)
-    if isDonateEnabled() {
-      stackView.addArrangedSubviewWithSeparator(donationView)
-    }
-    stackView.addArrangedSubviewWithSeparator(osmView)
+    // if isDonateEnabled() {
+    //   stackView.addArrangedSubviewWithSeparator(donationView)
+    // }
+    // stackView.addArrangedSubviewWithSeparator(osmView)
     stackView.addArrangedSubviewWithSeparator(infoTableView)
-    stackView.addArrangedSubviewWithSeparator(socialMediaHeaderLabel)
-    stackView.addArrangedSubview(socialMediaCollectionView)
-    stackView.addArrangedSubviewWithSeparator(termsOfUseAndPrivacyPolicyView)
+    // stackView.addArrangedSubviewWithSeparator(socialMediaHeaderLabel)
+    // stackView.addArrangedSubview(socialMediaCollectionView)
+    // stackView.addArrangedSubviewWithSeparator(termsOfUseAndPrivacyPolicyView)
   }
 
   func layoutViews() {
@@ -215,10 +215,10 @@ private extension AboutController {
     stackView.translatesAutoresizingMaskIntoConstraints = false
     logoImageView.translatesAutoresizingMaskIntoConstraints = false
     additionalInfoStackView.translatesAutoresizingMaskIntoConstraints = false
-    donationView.translatesAutoresizingMaskIntoConstraints = false
+    // donationView.translatesAutoresizingMaskIntoConstraints = false
     infoTableView.translatesAutoresizingMaskIntoConstraints = false
-    socialMediaCollectionView.translatesAutoresizingMaskIntoConstraints = false
-    termsOfUseAndPrivacyPolicyView.translatesAutoresizingMaskIntoConstraints = false
+    // socialMediaCollectionView.translatesAutoresizingMaskIntoConstraints = false
+    // termsOfUseAndPrivacyPolicyView.translatesAutoresizingMaskIntoConstraints = false
 
     NSLayoutConstraint.activate([
       scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
@@ -237,60 +237,47 @@ private extension AboutController {
 
       additionalInfoStackView.widthAnchor.constraint(equalTo: stackView.widthAnchor),
 
-      osmView.widthAnchor.constraint(equalTo: stackView.widthAnchor),
+      // osmView.widthAnchor.constraint(equalTo: stackView.widthAnchor),
 
       infoTableView.widthAnchor.constraint(equalTo: stackView.widthAnchor),
       infoTableView.heightAnchor.constraint(equalToConstant: Constants.infoTableViewCellHeight * CGFloat(infoTableViewData.count)),
 
-      socialMediaHeaderLabel.leadingAnchor.constraint(equalTo: socialMediaCollectionView.leadingAnchor),
+      // socialMediaHeaderLabel.leadingAnchor.constraint(equalTo: socialMediaCollectionView.leadingAnchor),
 
-      socialMediaCollectionView.widthAnchor.constraint(equalTo: stackView.widthAnchor),
-      socialMediaCollectionView.contentLayoutGuide.widthAnchor.constraint(equalTo: stackView.widthAnchor),
-      socialMediaCollectionViewHeighConstraint,
+      // socialMediaCollectionView.widthAnchor.constraint(equalTo: stackView.widthAnchor),
+      // socialMediaCollectionView.contentLayoutGuide.widthAnchor.constraint(equalTo: stackView.widthAnchor),
+      // socialMediaCollectionViewHeighConstraint,
 
-      termsOfUseAndPrivacyPolicyView.widthAnchor.constraint(equalTo: stackView.widthAnchor),
+      // termsOfUseAndPrivacyPolicyView.widthAnchor.constraint(equalTo: stackView.widthAnchor),
     ])
-    donationView.widthAnchor.constraint(equalTo: stackView.widthAnchor).isActive = isDonateEnabled()
+    // donationView.widthAnchor.constraint(equalTo: stackView.widthAnchor).isActive = isDonateEnabled()
 
     view.layoutIfNeeded()
-    updateCollection()
+    // updateCollection()
   }
 
-  func updateCollection() {
-    socialMediaCollectionView.collectionViewLayout.invalidateLayout()
-    // On devices with the iOS 12 the actual collectionView layout update not always occurs during the current layout update cycle.
-    // So constraints update should be performed on the next layout update cycle.
-    DispatchQueue.main.async {
-      self.socialMediaCollectionViewHeighConstraint.constant = self.socialMediaCollectionView.collectionViewLayout.collectionViewContentSize.height
-    }
-  }
+  // func updateCollection() {
+  //   socialMediaCollectionView.collectionViewLayout.invalidateLayout()
+  //   // On devices with the iOS 12 the actual collectionView layout update not always occurs during the current layout update cycle.
+  //   // So constraints update should be performed on the next layout update cycle.
+  //   DispatchQueue.main.async {
+  //     self.socialMediaCollectionViewHeighConstraint.constant = self.socialMediaCollectionView.collectionViewLayout.collectionViewContentSize.height
+  //   }
+  // }
 
   func isDonateEnabled() -> Bool {
     return Settings.donateUrl() != nil
   }
 
   func buildInfoTableViewData() -> [AboutInfoTableViewCellModel] {
-    let infoContent: [AboutInfo] = [.faq, .reportMapDataProblem, .reportABug, .news, .volunteer, .rateTheApp]
+    let infoContent: [AboutInfo] = [.faq]
     let data = infoContent.map { [weak self] aboutInfo in
       return AboutInfoTableViewCellModel(title: aboutInfo.title, image: aboutInfo.image, didTapHandler: {
         switch aboutInfo {
         case .faq:
           self?.navigationController?.pushViewController(FaqController(), animated: true)
-        case .reportABug:
-          guard let link = aboutInfo.link else { fatalError("The recipient link should be provided to report a bug.") }
-          UIApplication.shared.showLoadingOverlay {
-            let logFileURL = Logger.getLogFileURL()
-            UIApplication.shared.hideLoadingOverlay {
-              guard let self else { return }
-              self.sendEmailWith(header: "Organic Maps Bugreport", toRecipients: [link], attachmentFileURL: logFileURL)
-            }
-          }
-        case .reportMapDataProblem, .volunteer, .news:
-          self?.openUrl(aboutInfo.link)
-        case .rateTheApp:
-          UIApplication.shared.rateApp()
-        default:
-          break
+        case .noWifi:
+          return
         }
       })
     }
@@ -322,7 +309,7 @@ private extension AboutController {
   }
 
   // Returns a human-readable maps data version.
-  static func formattedMapsDataVersion() -> String {
+  func formattedMapsDataVersion() -> String {
     // First, convert version code like 220131 to a date.
     let df = DateFormatter()
     df.locale = Locale(identifier:"en_US_POSIX")
@@ -336,7 +323,7 @@ private extension AboutController {
     return df.string(from:mapsDate)
   }
 
-  static func formattedAppVersion() -> String {
+  func formattedAppVersion() -> String {
     let appInfo = AppInfo.shared();
     // Use strong left-to-right unicode direction characters for the app version.
     return String(format: L("version"), "\u{2066}\(appInfo.bundleVersion)-\(appInfo.buildNumber)\u{2069}")
@@ -361,11 +348,11 @@ private extension AboutController {
 // MARK: - Actions
 private extension AboutController {
   @objc func appVersionButtonTapped() {
-    copyToClipboard(Self.formattedAppVersion())
+    copyToClipboard(formattedAppVersion())
   }
 
   @objc func osmMapsDataButtonTapped() {
-    copyToClipboard(Self.formattedMapsDataVersion())
+    copyToClipboard(formattedMapsDataVersion())
   }
 }
 

@@ -6,7 +6,6 @@ class BottomMenuPresenter: NSObject {
   enum CellType: Int, CaseIterable {
     case addPlace
     case downloadMaps
-    case donate
     case settings
     case share
   }
@@ -48,7 +47,7 @@ extension BottomMenuPresenter {
   }
 
   private func correctedRow(_ row: Int) -> Int {
-    disableDonate && row >= CellType.donate.rawValue ? row + 1 : row
+    row
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -69,11 +68,6 @@ extension BottomMenuPresenter {
       cell.configure(imageName: "ic_menu_download",
                      title: L("download_maps"),
                      badgeCount: MapsAppDelegate.theApp().badgeNumber(),
-                     enabled: true)
-    case .donate:
-      cell.configure(imageName: Settings.isNY() ? "ic_christmas_tree" : "ic_menu_donate",
-                     title: L("donate"),
-                     badgeCount: 0,
                      enabled: true)
     case .settings:
       cell.configure(imageName: "ic_menu_settings",
@@ -104,8 +98,6 @@ extension BottomMenuPresenter {
       interactor.addPlace()
     case .downloadMaps:
       interactor.downloadMaps()
-    case .donate:
-      interactor.donate()
     case .settings:
       interactor.openSettings()
     case .share:

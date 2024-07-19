@@ -51,16 +51,13 @@
 "country_status_download_failed" = "डाउनलोड अयशस्वी";
 
 /* Text in About screen */
-"about_headline" = "Free for everyone, made with love";
+"about_headline" = "Disaster Response Information Management System (DRIMS)";
 
 /* Text in About screen */
-"about_proposition_1" = "• No ads, no tracking, no data collection";
+"about_proposition_1" = "• No ads, no tracking";
 
 /* Text in About screen */
 "about_proposition_2" = "• बॅटरी संपत नाही, ऑफलाइन कार्य करते";
-
-/* Text in About screen */
-"about_proposition_3" = "• जलद, मिनिमलिस्ट, समुदायाद्वारे विकसित";
 
 "close" = "बंद";
 

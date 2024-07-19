@@ -59,9 +59,6 @@
 /* Text in About screen */
 "about_proposition_2" = "• Pas d'épuisement de la batterie, fonctionne hors ligne";
 
-/* Text in About screen */
-"about_proposition_3" = "• Rapide, minimaliste, développé par la communauté";
-
 "close" = "Fermer";
 
 "download" = "Télécharger";

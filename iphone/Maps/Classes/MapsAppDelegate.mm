@@ -13,10 +13,9 @@
 #import "MapViewController.h"
 #import "NSDate+TimeDistance.h"
 #import "SwiftBridge.h"
-
-#import <FirebaseCore/FirebaseCore.h>;
-#import <FirebaseMessaging/FirebaseMessaging.h>;
-#import <UserNotifications/UserNotifications.h>;
+#import <FirebaseCore/FirebaseCore.h>
+#import <FirebaseMessaging/FirebaseMessaging.h>
+#import <UserNotifications/UserNotifications.h>
 
 #import <CarPlay/CarPlay.h>
 #import <CoreApi/Framework.h>
@@ -25,7 +24,6 @@
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 
 #include "map/gps_tracker.hpp"
-
 #include "platform/background_downloader_ios.h"
 #include "platform/http_thread_apple.h"
 #include "platform/local_country_file_utils.hpp"
@@ -141,17 +139,19 @@ using namespace osm_auth_ios;
   return YES;
 }
 - (void)messaging:(FIRMessaging *)messaging didReceiveRegistrationToken:(NSString *)fcmToken {
+
   NSLog(@"FCM registration token: %@", fcmToken);
   // Notify about received token.
   NSDictionary *dataDict = [NSDictionary dictionaryWithObject:fcmToken forKey:@"token"];
   [[NSNotificationCenter defaultCenter] postNotificationName:@"FCMToken" object:nil userInfo:dataDict];
   // TODO: If necessary send token to application server.
-  // Note: This callback is fired at each app startup and whenever a new token is generated.
+  // // Note: This callback is fired at each app startup and whenever a new token is generated.
   [[FIRMessaging messaging] tokenWithCompletion:^(NSString *token, NSError *error) {
     if (error != nil) {
       NSLog(@"Error getting FCM registration token: %@", error);
     } else {
       NSLog(@"FCM registration token: %@", token);
+      GetFramework().StoreFcmToken([token UTF8String]);
     }
   }];
 }

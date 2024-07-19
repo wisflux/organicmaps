@@ -59,9 +59,6 @@
 /* Text in About screen */
 "about_proposition_2" = "• Žádné vybíjení baterie, funguje offline";
 
-/* Text in About screen */
-"about_proposition_3" = "• Rychlé, minimalistické, vyvinutý komunitou";
-
 "close" = "Zavřít";
 
 "download" = "Stáhnout";

@@ -59,9 +59,6 @@
 /* Text in About screen */
 "about_proposition_2" = "• Δεν εξαντλεί τη μπαταρία, λειτουργεί εκτός σύνδεσης";
 
-/* Text in About screen */
-"about_proposition_3" = "• Γρήγορο, μινιμαλιστικό, αναπτυγμένο από την κοινότητα";
-
 "close" = "Κλείσιμο";
 
 "download" = "Λήψη";
