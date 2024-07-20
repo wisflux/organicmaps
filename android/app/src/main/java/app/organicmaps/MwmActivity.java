@@ -167,6 +167,7 @@ public class MwmActivity extends BaseMwmFragmentActivity
 
   private NavigationController mNavigationController;
 
+
   private MainMenu mMainMenu;
 
   private PanelAnimator mPanelAnimator;
@@ -384,6 +385,11 @@ public class MwmActivity extends BaseMwmFragmentActivity
   private void showHelp()
   {
     Intent intent = new Intent(this, HelpActivity.class);
+    startActivity(intent);
+  }
+
+  private void showAlerts(){
+    Intent intent = new Intent(this, AlertsActivity.class);
     startActivity(intent);
   }
 
@@ -774,6 +780,7 @@ public class MwmActivity extends BaseMwmFragmentActivity
         showBottomSheet(MAIN_MENU_ID);
       }
       case help -> showHelp();
+      case alerts -> showAlerts();
     }
   }
 

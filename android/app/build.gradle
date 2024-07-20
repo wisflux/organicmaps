@@ -348,7 +348,8 @@ android {
 
 dependencies {
   implementation 'com.google.firebase:firebase-messaging:24.0.0'
-  coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+    implementation 'androidx.activity:activity:1.8.0'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
 
   // Google Play Location Services
   //
