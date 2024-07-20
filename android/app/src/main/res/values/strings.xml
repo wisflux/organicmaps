@@ -38,7 +38,7 @@
 	<string name="country_status_download_failed">Download has failed</string>
 	<!-- Button text for the button under the country_status_download_failed message -->
 	<string name="try_again">Try Again</string>
-	<string name="about_menu_title">About Organic Maps</string>
+	<string name="about_menu_title">About DRIMS</string>
 	<!-- Text in About screen -->
 	<string name="about_headline">Free for everyone, made with love</string>
 	<!-- Text in About screen -->
@@ -55,7 +55,7 @@
 	<string name="unsupported_phone">The app requires hardware accelerated OpenGL. Unfortunately, your device is not supported.</string>
 	<string name="download">Download</string>
 	<!-- Used in DownloadResources startup screen -->
-	<string name="disconnect_usb_cable">Please disconnect USB cable or insert memory card to use Organic Maps</string>
+	<string name="disconnect_usb_cable">Please disconnect USB cable or insert memory card to use DRIMS Maps</string>
 	<!-- Used in DownloadResources startup screen -->
 	<string name="not_enough_free_space_on_sdcard">Please free up some space on the SD card/USB storage first in order to use the app</string>
 	<string name="download_resources">Before you start using the app, please download the general world map to your device.\nIt will use %s of storage.</string>
@@ -168,8 +168,8 @@
 	<!-- Notes field in Bookmarks view -->
 	<string name="description">Notes</string>
 	<!-- Email Subject when sharing bookmark list -->
-	<string name="share_bookmarks_email_subject">Organic Maps bookmarks were shared with you</string>
-	<string name="share_bookmarks_email_body">Hello!\n\nAttached are my bookmarks; please open them in Organic Maps. If you don\'t have it installed you can download it here: https://omaps.app/get?kmz\n\nEnjoy travelling with Organic Maps!</string>
+	<string name="share_bookmarks_email_subject">DRIMS bookmarks were shared with you</string>
+	<string name="share_bookmarks_email_body">Hello!\n\nAttached are my bookmarks; please open them in DRIMS. If you don\'t have it installed you can download it here: https://omaps.app/get?kmz\n\nEnjoy travelling with Organic Maps!</string>
 	<!-- message title of loading file -->
 	<string name="load_kmz_title">Loading Bookmarks</string>
 	<!-- Kmz file successful loading -->
@@ -189,11 +189,11 @@
 	<!-- Alert message that downloading is in progress. -->
 	<string name="downloading_is_active">Map download is in progress now.</string>
 	<!-- Share my position using SMS, %1$@ contains om:// and %2$@ https://omaps.app link WITHOUT NAME. @NOTE non-ascii symbols in the link will result in max 70 characters SMS instead of 140. -->
-	<string name="my_position_share_sms">Check out my current location in Organic Maps! %1$s or %2$s Don\'t have offline maps? Download here: https://omaps.app/get</string>
+	<string name="my_position_share_sms">Check out my current location in DRIMS! %1$s or %2$s Don\'t have offline maps? Download here: https://omaps.app/get</string>
 	<!-- Subject for emailed bookmark -->
-	<string name="bookmark_share_email_subject">Hey, check out my pin in Organic Maps!</string>
+	<string name="bookmark_share_email_subject">Hey, check out my pin in DRIMS!</string>
 	<!-- Subject for emailed position -->
-	<string name="my_position_share_email_subject">Hey, check out my current location on the Organic Maps map!</string>
+	<string name="my_position_share_email_subject">Hey, check out my current location on the DRIMS map!</string>
 	<!-- Share my position using EMail, %1$@ is om:// and %2$@ is https://omaps.app link WITHOUT NAME -->
 	<string name="my_position_share_email">Hi,\n\nI\'m here now: %1$s. Click this link %2$s or this one %3$s to see the place on the map.\n\nThanks.</string>
 	<!-- Share button text which opens menu with more buttons, like Message, EMail, Facebook etc. -->
@@ -558,7 +558,7 @@
 	<!-- A referral link on the place page for some hotels -->
 	<string name="more_on_kayak">Photos, reviews, booking</string>
 	<!-- An explanation dialog shown when clicking on more_on_kayak link. -->
-	<string name="dialog_kayak_disclaimer">The referral bonus received for each booking through this link goes towards the development of Organic Maps.</string>
+	<string name="dialog_kayak_disclaimer">The referral bonus received for each booking through this link goes towards the development of DRIMS.</string>
 	<!-- A confirmation button text in the explanation dialog that opens hotel details page on Kayak website. -->
 	<string name="dialog_kayak_button">Details on Kayak</string>
 	<string name="placepage_edit_bookmark_button">Edit Bookmark</string>

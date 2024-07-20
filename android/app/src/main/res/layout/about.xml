@@ -22,9 +22,8 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/margin_base"
         android:layout_marginBottom="@dimen/margin_half"
-        android:contentDescription="@string/app_name"
-        app:srcCompat="@drawable/logo"
-        app:tint="?attr/colorLogo" />
+        android:contentDescription="DRIMS"
+        app:srcCompat="@drawable/asset_1_3" />
 
     <TextView
         android:id="@+id/version"
@@ -33,116 +32,24 @@
         android:gravity="center_horizontal"
         android:layout_marginBottom="@dimen/margin_half"
         android:selectAllOnFocus="true"
-        android:textAppearance="@style/MwmTextAppearance.Body3"
+        android:textAppearance="@style/MwmTextAppearance.Title"
         android:textIsSelectable="true"
-        tools:text="2021.10.15-15-Google" />
-
+        android:text="DRIMS"/>
     <TextView
+        style="@style/MwmWidget.TextView.Item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_base"
-        android:text="@string/about_headline"
-        android:textAlignment="center"
-        android:textAppearance="@style/MwmTextAppearance.Headline"
-        android:textColor="?android:textColorPrimary" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
         android:layout_marginBottom="@dimen/margin_half"
-        android:text="@string/about_proposition_1"
-        android:textAppearance="@style/MwmTextAppearance.Body1"
-        android:textColor="?android:textColorPrimary" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_half"
-        android:text="@string/about_proposition_2"
-        android:textAppearance="@style/MwmTextAppearance.Body1"
-        android:textColor="?android:textColorPrimary" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_half"
-        android:text="@string/about_proposition_3"
-        android:textAppearance="@style/MwmTextAppearance.Body1"
-        android:textColor="?android:textColorPrimary" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_half"
-        android:fontFamily="@string/robotoRegular"
-        android:text="@string/about_developed_by_enthusiasts"
-        android:textAppearance="@style/MwmTextAppearance.Body2"
-        android:textColor="?android:textColorPrimary"
-        android:textStyle="bold" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-      <ImageView
-          android:id="@+id/osm_logo"
-          android:layout_width="@dimen/osm_logo"
-          android:layout_height="@dimen/osm_logo"
-          android:layout_gravity="center"
-          android:contentDescription="@string/openstreetmap"
-          app:srcCompat="@drawable/ic_openstreetmap_color"
-          app:layout_constraintBottom_toBottomOf="parent"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent" />
-
-      <TextView
-          android:id="@+id/osm_presentation"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_marginStart="@dimen/margin_half"
-          android:fontFamily="@string/robotoRegular"
-          android:includeFontPadding="false"
-          android:text="@string/osm_presentation"
-          android:textAppearance="@style/MwmTextAppearance.Body2"
-          android:textColor="?android:textColorPrimary"
-          app:layout_constraintBottom_toBottomOf="parent"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintStart_toEndOf="@+id/osm_logo"
-          app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <Button
-        android:id="@+id/donate"
-        style="@style/MwmWidget.Button.Accent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_base"
-        android:fontFamily="@string/robotoMedium"
-        android:padding="@dimen/margin_quarter"
-        android:text="@string/donate" />
-
-    <Button
-        android:id="@+id/report"
-        style="@style/MwmWidget.Button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_base"
-        android:background="@color/light_gray"
-        android:fontFamily="@string/robotoMedium"
-        android:text="@string/report_a_bug"
-        android:textColor="@color/text_dark" />
-
+        android:selectAllOnFocus="true"
+        android:text="Disaster Response Information Management System (DRIMS)"
+       />
     <TextView
       android:id="@+id/faq"
       style="@style/MwmWidget.TextView.Item"
       android:text="@string/faq"
       app:drawableStartCompat="@drawable/ic_question_mark" />
 
-    <TextView
-        android:id="@+id/support_us"
-        style="@style/MwmWidget.TextView.Item"
-        android:text="@string/how_to_support_us"
-        app:drawableStartCompat="@drawable/ic_donate" />
 
     <TextView
         android:id="@+id/news"
@@ -150,71 +57,6 @@
         android:text="@string/news"
         app:drawableStartCompat="@drawable/ic_news" />
 
-    <TextView
-        android:id="@+id/rate"
-        style="@style/MwmWidget.TextView.Item"
-        android:text="@string/rate_the_app"
-        app:drawableStartCompat="@drawable/ic_rate" />
-
-    <TextView
-        android:id="@+id/telegram"
-        style="@style/MwmWidget.TextView.Item"
-        android:text="@string/telegram"
-        app:drawableStartCompat="@drawable/ic_telegram" />
-
-    <TextView
-        android:id="@+id/github"
-        style="@style/MwmWidget.TextView.Item"
-        android:text="@string/github"
-        app:drawableStartCompat="@drawable/ic_github" />
-
-    <TextView
-        android:id="@+id/web"
-        style="@style/MwmWidget.TextView.Item"
-        android:text="@string/website"
-        app:drawableStartCompat="@drawable/ic_website" />
-
-    <TextView
-        android:id="@+id/email"
-        style="@style/MwmWidget.TextView.Item"
-        android:text="@string/email"
-        app:drawableStartCompat="@drawable/ic_email" />
-
-    <TextView
-        android:id="@+id/matrix"
-        style="@style/MwmWidget.TextView.Item"
-        android:text="@string/matrix"
-        app:drawableStartCompat="@drawable/ic_matrix" />
-
-    <TextView
-        android:id="@+id/mastodon"
-        style="@style/MwmWidget.TextView.Item"
-        android:text="@string/mastodon"
-        app:drawableStartCompat="@drawable/ic_mastodon" />
-
-    <TextView
-        android:id="@+id/facebook"
-        style="@style/MwmWidget.TextView.Item"
-        android:text="@string/facebook"
-        app:drawableStartCompat="@drawable/ic_facebook" />
-
-    <TextView
-        android:id="@+id/twitter"
-        style="@style/MwmWidget.TextView.Item"
-        android:text="@string/twitter"
-        app:drawableStartCompat="@drawable/ic_twitterx" />
-
-    <TextView
-        android:id="@+id/instagram"
-        style="@style/MwmWidget.TextView.Item"
-        android:text="@string/instagram"
-        app:drawableStartCompat="@drawable/ic_instagram" />
-
-    <TextView
-        android:id="@+id/openstreetmap"
-        style="@style/MwmWidget.TextView.Item"
-        android:text="@string/openstreetmap"
-        app:drawableStartCompat="@drawable/ic_openstreetmap" />
 
     <View
         android:layout_width="match_parent"

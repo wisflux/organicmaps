@@ -52,40 +52,40 @@ public class HelpFragment extends BaseMwmFragment implements View.OnClickListene
       osmPresentationView.setText(getString(R.string.osm_presentation, dataVersion));
 
     setupItem(R.id.news, true, root);
-    setupItem(R.id.web, true, root);
-    setupItem(R.id.email, true, root);
-    setupItem(R.id.github, true, root);
-    setupItem(R.id.telegram, false, root);
-    setupItem(R.id.instagram, false, root);
-    setupItem(R.id.facebook, false, root);
-    setupItem(R.id.twitter, true, root);
-    setupItem(R.id.matrix, true, root);
-    setupItem(R.id.mastodon, false, root);
-    setupItem(R.id.openstreetmap, true, root);
-    setupItem(R.id.faq, true, root);
-    setupItem(R.id.report, isLandscape, root);
+//    setupItem(R.id.web, true, root);
+//    setupItem(R.id.email, true, root);
+//    setupItem(R.id.github, true, root);
+//    setupItem(R.id.telegram, false, root);
+//    setupItem(R.id.instagram, false, root);
+//    setupItem(R.id.facebook, false, root);
+//    setupItem(R.id.twitter, true, root);
+//    setupItem(R.id.matrix, true, root);
+//    setupItem(R.id.mastodon, false, root);
+//    setupItem(R.id.openstreetmap, true, root);
+//    setupItem(R.id.faq, true, root);
+//    setupItem(R.id.report, isLandscape, root);
 
-    final TextView supportUsView = root.findViewById(R.id.support_us);
-    if (BuildConfig.FLAVOR.equals("google") && !TextUtils.isEmpty(mDonateUrl))
-      supportUsView.setVisibility(View.GONE);
-    else
-      setupItem(R.id.support_us, true, root);
-
-    final TextView donateView = root.findViewById(R.id.donate);
-    if (TextUtils.isEmpty(mDonateUrl))
-      donateView.setVisibility(View.GONE);
-    else
-    {
-      if (Config.isNY())
-        donateView.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_christmas_tree, 0,
-            R.drawable.ic_christmas_tree, 0);
-      setupItem(R.id.donate, isLandscape, root);
-    }
-
-    if (BuildConfig.REVIEW_URL.isEmpty())
-      root.findViewById(R.id.rate).setVisibility(View.GONE);
-    else
-      setupItem(R.id.rate, true, root);
+//    final TextView supportUsView = root.findViewById(R.id.support_us);
+//    if (BuildConfig.FLAVOR.equals("google") && !TextUtils.isEmpty(mDonateUrl))
+//      supportUsView.setVisibility(View.GONE);
+//    else
+//      setupItem(R.id.support_us, true, root);
+//
+//    final TextView donateView = root.findViewById(R.id.donate);
+//    if (TextUtils.isEmpty(mDonateUrl))
+//      donateView.setVisibility(View.GONE);
+//    else
+//    {
+//      if (Config.isNY())
+//        donateView.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_christmas_tree, 0,
+//            R.drawable.ic_christmas_tree, 0);
+//      setupItem(R.id.donate, isLandscape, root);
+//    }
+//
+//    if (BuildConfig.REVIEW_URL.isEmpty())
+//      root.findViewById(R.id.rate).setVisibility(View.GONE);
+//    else
+//      setupItem(R.id.rate, true, root);
 
     setupItem(R.id.copyright, false, root);
     View termOfUseView = root.findViewById(R.id.term_of_use_link);
