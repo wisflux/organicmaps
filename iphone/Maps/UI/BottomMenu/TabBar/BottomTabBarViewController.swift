@@ -9,6 +9,7 @@ class BottomTabBarViewController: UIViewController {
   @IBOutlet var bookmarksButton: MWMButton!
   @IBOutlet var AlertsButton: MWMButton!
   @IBOutlet var moreButton: MWMButton!
+  @IBOutlet var liveFeedsButton: MWMButton!
   @IBOutlet var downloadBadge: UIView!
   @IBOutlet var helpBadge: UIView!
   
@@ -36,6 +37,8 @@ class BottomTabBarViewController: UIViewController {
     var size = CGSize(width: 48, height: 48);
     AlertsButton.size = size;
     AlertsButton.applyTheme();
+    liveFeedsButton.size = size;
+    liveFeedsButton.applyTheme();
     MWMSearchManager.add(self)
   }
   
@@ -64,6 +67,10 @@ class BottomTabBarViewController: UIViewController {
     presenter.onAlertsButtonPressed()
   }
   
+  @IBAction func onLiveFeedsButtonPressed(_ sender: Any) {
+    presenter.onLiveFeedsButtonPressed()
+  }
+
   @IBAction func onHelpButtonPressed(_ sender: Any) {
     if !helpBadge.isHidden {
       presenter.onHelpButtonPressed(withBadge: true)

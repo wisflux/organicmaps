@@ -15,6 +15,7 @@
                 <outlet property="downloadBadge" destination="uDI-ZC-4wx" id="fAf-cy-Ozn"/>
                 <outlet property="helpBadge" destination="0pe-0n-d1F" id="pua-oN-kIZ"/>
                 <outlet property="helpButton" destination="dzf-7Z-N6a" id="ORg-VO-5ar"/>
+                <outlet property="liveFeedsButton" destination="live-destination" id="live-id"/>
                 <outlet property="moreButton" destination="svD-yi-GrZ" id="kjk-ZW-nZN"/>
                 <outlet property="searchButton" destination="No0-ld-JX3" id="m5F-UT-j94"/>
                 <outlet property="view" destination="zuH-WU-hiP" id="eoa-4I-wKs"/>
@@ -26,11 +27,11 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vum-s3-PHx" userLabel="MainButtons" customClass="ExtendedBottomTabBarContainerView" customModule="Organic_Maps" customModuleProvider="target">
-                    <rect key="frame" x="0.0" y="0.0" width="373" height="48"/>
+                    <rect key="frame" x="0.0" y="2" width="373" height="48"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dzf-7Z-N6a" userLabel="Help" customClass="BottomTabBarButton" customModule="Organic_Maps" customModuleProvider="target">
-                            <rect key="frame" x="11" y="0.0" width="48" height="48"/>
+                            <rect key="frame" x="8" y="0.0" width="48" height="48"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <accessibility key="accessibilityConfiguration" identifier="helpButton"/>
                             <fontDescription key="fontDescription" type="system" pointSize="30"/>
@@ -40,28 +41,18 @@
                                 <action selector="onHelpButtonPressed:" destination="-1" eventType="touchUpInside" id="1gx-P2-sRJ"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" horizontalCompressionResistancePriority="751" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="No0-ld-JX3" userLabel="Search" customClass="BottomTabBarButton" customModule="Organic_Maps" customModuleProvider="target">
-                            <rect key="frame" x="79" y="0.0" width="48" height="48"/>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="live-destination" userLabel="LiveFeeds" customClass="BottomTabBarButton" customModule="Organic_Maps" customModuleProvider="target">
+                            <rect key="frame" x="201" y="0.0" width="48" height="48"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <accessibility key="accessibilityConfiguration" identifier="searchButton"/>
+                            <accessibility key="accessibilityConfiguration" identifier="liveFeedsButton"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                            <state key="normal" image="ic_menu_search"/>
+                            <state key="normal" image="ic_settings_feedback"/>
                             <connections>
-                                <action selector="onSearchButtonPressed:" destination="-1" eventType="touchUpInside" id="0D5-RB-HBQ"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dgG-ki-3tB" userLabel="Bookmarks" customClass="BottomTabBarButton" customModule="Organic_Maps" customModuleProvider="target">
-                            <rect key="frame" x="232" y="0.0" width="48" height="48"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <accessibility key="accessibilityConfiguration" identifier="bookmarksButton"/>
-                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                            <state key="normal" image="ic_menu_bookmark_list"/>
-                            <connections>
-                                <action selector="onBookmarksButtonPressed:" destination="-1" eventType="touchUpInside" id="9Z1-eg-xth"/>
+                                <action selector="onLiveFeedsButtonPressed:" destination="-1" eventType="touchUpInside" id="9Z5-mg-xth"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="alert-destination" userLabel="Alerts" customClass="BottomTabBarButton" customModule="Organic_Maps" customModuleProvider="target">
-                            <rect key="frame" x="162" y="0.0" width="42" height="40"/>
+                            <rect key="frame" x="67" y="0.0" width="48" height="48"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <accessibility key="accessibilityConfiguration" identifier="alertsButton"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -87,13 +78,33 @@
                             </userDefinedRuntimeAttributes>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="svD-yi-GrZ" userLabel="Menu" customClass="BottomTabBarButton" customModule="Organic_Maps" customModuleProvider="target">
-                            <rect key="frame" x="310" y="0.0" width="48" height="48"/>
+                            <rect key="frame" x="325" y="0.0" width="48" height="48"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <accessibility key="accessibilityConfiguration" identifier="menuButton"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                             <state key="normal" image="ic_menu"/>
                             <connections>
                                 <action selector="onMenuButtonPressed:" destination="-1" eventType="touchUpInside" id="rzb-y4-nR1"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" horizontalCompressionResistancePriority="751" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="No0-ld-JX3" userLabel="Search" customClass="BottomTabBarButton" customModule="Organic_Maps" customModuleProvider="target">
+                            <rect key="frame" x="132" y="0.0" width="48" height="48"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <accessibility key="accessibilityConfiguration" identifier="searchButton"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" image="ic_menu_search"/>
+                            <connections>
+                                <action selector="onSearchButtonPressed:" destination="-1" eventType="touchUpInside" id="0D5-RB-HBQ"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dgG-ki-3tB" userLabel="Bookmarks" customClass="BottomTabBarButton" customModule="Organic_Maps" customModuleProvider="target">
+                            <rect key="frame" x="269" y="0.0" width="48" height="48"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <accessibility key="accessibilityConfiguration" identifier="bookmarksButton"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" image="ic_menu_bookmark_list"/>
+                            <connections>
+                                <action selector="onBookmarksButtonPressed:" destination="-1" eventType="touchUpInside" id="9Z5-eg-xth"/>
                             </connections>
                         </button>
                     </subviews>
@@ -113,10 +124,11 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_options_warning" width="48" height="48"/>
         <image name="ic_menu" width="48" height="48"/>
         <image name="ic_menu_bookmark_list" width="48" height="48"/>
         <image name="ic_menu_search" width="48" height="48"/>
+        <image name="ic_options_warning" width="24" height="24"/>
+        <image name="ic_settings_feedback" width="28" height="28"/>
         <image name="logo" width="233.74000549316406" height="284"/>
     </resources>
 </document>

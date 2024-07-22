@@ -471,6 +471,7 @@
 		E99D4FB52C4E38D0003F7B05 /* AlertsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99D4FB42C4E38D0003F7B05 /* AlertsViewController.swift */; };
 		E99D4FB92C4E4BFA003F7B05 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99D4FB82C4E4BFA003F7B05 /* LoginViewController.swift */; };
 		E99D4FBB2C4E4F14003F7B05 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E99D4FBA2C4E4F14003F7B05 /* Login.storyboard */; };
+		E99D4FBD2C4E8F6A003F7B05 /* LiveFeedsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99D4FBC2C4E8F6A003F7B05 /* LiveFeedsViewController.swift */; };
 		E9B435F02C48E8E60031B0B0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E9B435EF2C48E8E60031B0B0 /* GoogleService-Info.plist */; };
 		E9B435F12C48E8E60031B0B0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E9B435EF2C48E8E60031B0B0 /* GoogleService-Info.plist */; };
 		E9B435F42C48E9A70031B0B0 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = E9B435F32C48E9A70031B0B0 /* FirebaseMessaging */; };
@@ -1390,6 +1391,7 @@
 		E99D4FB42C4E38D0003F7B05 /* AlertsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsViewController.swift; sourceTree = "<group>"; };
 		E99D4FB82C4E4BFA003F7B05 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		E99D4FBA2C4E4F14003F7B05 /* Login.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
+		E99D4FBC2C4E8F6A003F7B05 /* LiveFeedsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveFeedsViewController.swift; sourceTree = "<group>"; };
 		E9B435EF2C48E8E60031B0B0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ED097E762BB80C320006ED01 /* OMapsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OMapsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED0B1C302BC2951F00FB8EDD /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
@@ -3378,6 +3380,7 @@
 				340E1EE31E2F614400CE49BF /* Storyboard */,
 				E99D4FB42C4E38D0003F7B05 /* AlertsViewController.swift */,
 				E99D4FB82C4E4BFA003F7B05 /* LoginViewController.swift */,
+				E99D4FBC2C4E8F6A003F7B05 /* LiveFeedsViewController.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -4295,6 +4298,7 @@
 				34AB66831FC5AA330078E451 /* NavigationAddPointToastView.swift in Sources */,
 				F6E2FE4C1E097BA00083EBEC /* MWMPlacePageManager.mm in Sources */,
 				3404757E1E081B3300C92850 /* iosOGLContext.mm in Sources */,
+				E99D4FBD2C4E8F6A003F7B05 /* LiveFeedsViewController.swift in Sources */,
 				993F5513237C622700545511 /* DeepLinkHandler.swift in Sources */,
 				993DF11223F6BDB100AC231A /* UIImageRenderer.swift in Sources */,
 				F6E2FD5C1E097BA00083EBEC /* MWMMapDownloaderCellHeader.m in Sources */,

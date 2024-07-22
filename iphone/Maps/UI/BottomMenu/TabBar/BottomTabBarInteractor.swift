@@ -5,6 +5,7 @@ protocol BottomTabBarInteractorProtocol: AnyObject {
   func openBookmarks()
   func openMenu()
   func openAlerts()
+  func openLiveFeeds()
 }
 
 class BottomTabBarInteractor {
@@ -47,6 +48,10 @@ extension BottomTabBarInteractor: BottomTabBarInteractorProtocol {
   
   func openBookmarks() {
     mapViewController?.bookmarksCoordinator.open()
+  }
+
+  func openLiveFeeds() {
+    MapViewController.shared()?.navigationController?.pushViewController(LiveFeedsViewController(), animated: true)
   }
   
   func openMenu() {
