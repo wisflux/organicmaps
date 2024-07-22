@@ -146,14 +146,7 @@ using namespace osm_auth_ios;
   [[NSNotificationCenter defaultCenter] postNotificationName:@"FCMToken" object:nil userInfo:dataDict];
   // TODO: If necessary send token to application server.
   // // Note: This callback is fired at each app startup and whenever a new token is generated.
-  [[FIRMessaging messaging] tokenWithCompletion:^(NSString *token, NSError *error) {
-    if (error != nil) {
-      NSLog(@"Error getting FCM registration token: %@", error);
-    } else {
-      NSLog(@"FCM registration token: %@", token);
-      GetFramework().StoreFcmToken([token UTF8String]);
-    }
-  }];
+ 
 }
 
 - (void)application:(UIApplication *)application

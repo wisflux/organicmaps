@@ -231,6 +231,7 @@ public:
 
   void CreateTestMapObjectIfNeeded(MwmSet::MwmId id);
   void HandleDeviceToken(std::string const & deviceToken);
+  void storeDeviceToken(std::string const & deviceToken);
 
   df::DrapeApi & GetDrapeApi() { return m_drapeApi; }
 
@@ -396,7 +397,11 @@ public:
   void SwitchMyPositionNextMode();
   /// Should be set before Drape initialization. Guarantees that fn is called in main thread context.
   void SetMyPositionModeListener(location::TMyPositionModeChanged && fn);
-  void StoreFcmToken(std::string const & token) { GetPlatform().GetSecureStorage().Save("fcmToken", token); };
+  void StoreFcmToken(std::string const & token)
+  {
+    GetPlatform().GetSecureStorage().Save("fcmToken", token);
+    LOG(LINFO, ("FCM token saved"));
+  };
   std::string GetFcmToken()
   {
     std::string token;

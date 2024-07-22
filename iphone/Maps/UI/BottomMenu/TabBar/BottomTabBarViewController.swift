@@ -7,6 +7,7 @@ class BottomTabBarViewController: UIViewController {
   @IBOutlet var searchButton: MWMButton!
   @IBOutlet var helpButton: MWMButton!
   @IBOutlet var bookmarksButton: MWMButton!
+  @IBOutlet var AlertsButton: MWMButton!
   @IBOutlet var moreButton: MWMButton!
   @IBOutlet var downloadBadge: UIView!
   @IBOutlet var helpBadge: UIView!
@@ -32,7 +33,9 @@ class BottomTabBarViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     presenter.configure()
-    
+    var size = CGSize(width: 48, height: 48);
+    AlertsButton.size = size;
+    AlertsButton.applyTheme();
     MWMSearchManager.add(self)
   }
   
@@ -55,6 +58,10 @@ class BottomTabBarViewController: UIViewController {
   
   @IBAction func onSearchButtonPressed(_ sender: Any) {
     presenter.onSearchButtonPressed()
+  }
+
+  @IBAction func onAlertsButtonPressed(_ sender: Any) {
+    presenter.onAlertsButtonPressed()
   }
   
   @IBAction func onHelpButtonPressed(_ sender: Any) {

@@ -4,6 +4,7 @@ protocol BottomTabBarPresenterProtocol: AnyObject {
   func onHelpButtonPressed(withBadge: Bool)
   func onBookmarksButtonPressed()
   func onMenuButtonPressed()
+  func onAlertsButtonPressed()
 }
 
 class BottomTabBarPresenter: NSObject {
@@ -32,6 +33,10 @@ extension BottomTabBarPresenter: BottomTabBarPresenterProtocol {
 
   func onMenuButtonPressed() {
     interactor.openMenu()
+  }
+
+  func onAlertsButtonPressed() {
+    interactor.openAlerts()
   }
 }
 

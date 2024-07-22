@@ -11,6 +11,7 @@ enum Storyboard: Int {
   case drivingOptions
   case carPlay
   case placePage
+  case login
 }
 
 extension UIStoryboard {
@@ -28,6 +29,7 @@ extension UIStoryboard {
     case .drivingOptions: name = "DrivingOptions"
     case .carPlay: name = "CarPlayStoryboard"
     case .placePage: name = "PlacePage"
+    case .login: name = "Login"
     }
     return UIStoryboard(name: name, bundle: nil)
   }

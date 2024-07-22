@@ -458,7 +458,7 @@
                         <segue destination="XDU-iY-yV9" kind="custom" identifier="SettingsToTTSSegue" customClass="MWMSegue" id="3NT-hq-Oex"/>
                         <segue destination="NP0-s9-34g" kind="custom" identifier="SettingsToRecentTrackSegue" customClass="MWMSegue" id="Fny-RS-ueu"/>
                         <segue destination="kBJ-ZO-Mca" kind="custom" identifier="SettingsToNightMode" customClass="MWMSegue" id="dd2-uc-aSe"/>
-                        <segue destination="fxB-8Y-C2b" kind="custom" identifier="SettingsToProfileSegue" customClass="MWMSegue" id="p4d-e8-VbB"/>
+                        <segue destination="loginViewControllerPlaceholder" kind="custom" identifier="SettingsToProfileSegue" customClass="MWMSegue" id="p4d-e8-VbB"/>
                         <segue destination="Ww0-88-Jrd" kind="custom" identifier="SettingsToUnits" customClass="MWMSegue" id="qTg-HA-klp"/>
                         <segue destination="4XX-qH-r6x" kind="custom" identifier="SettingsToMobileInternetSegue" customClass="MWMSegue" id="wBF-fV-zWQ"/>
                         <segue destination="vni-Mo-vH1" kind="custom" identifier="SettingsToPowerManagementSegue" customClass="MWMSegue" id="arI-ZG-u4b"/>
@@ -921,7 +921,15 @@
                 <viewControllerPlaceholder storyboardName="Authorization" referencedIdentifier="AuthorizationLoginViewController" id="fxB-8Y-C2b" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DMV-2O-GbN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-559" y="428"/>
+            <point key="canvasLocation" x="-770" y="267"/>
+        </scene>
+        <!--LoginViewController-->
+        <scene sceneID="custom-login-scene">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Login" referencedIdentifier="LoginViewController" id="loginViewControllerPlaceholder" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sss-2O-GbN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-480" y="398"/>
         </scene>
         <!--DrivingOptions-->
         <scene sceneID="sWS-Id-gGL">

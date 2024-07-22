@@ -137,6 +137,12 @@ bool ParseSetGpsTrackMinAccuracyCommand(string const & query)
 
 pair<MwmSet::MwmId, MwmSet::RegResult> Framework::RegisterMap(LocalCountryFile const & file)
 {
+  auto storedtoken = GetFcmToken();
+  LOG(LINFO, ("Stored token:", storedtoken));
+  if (!storedtoken.empty())
+  {
+    HandleDeviceToken(storedtoken);
+  }
   auto res = m_featuresFetcher.RegisterMap(file);
   if (res.second == MwmSet::RegResult::Success)
   {
@@ -413,7 +419,7 @@ osm::EditableMapObject Framework::CreateGeoFeatureByMwmId(MwmSet::MwmId const & 
 std::string createUrl(m2::RectD rect)
 {
   // TODO: Get base url from config/enviroment
-  std::string baseUrl = "http://localhost:3000/api/geo-elements/published-transform-element-in-view-port?";
+  std::string baseUrl = "https://drimsplatform.com/api/api/geo-elements/published-transform-element-in-view-port?";
   std::string southWestLng = "southWest[lng]=" + std::to_string(rect.minX());
   std::string southWestLat = "&southWest[lat]=" + std::to_string(rect.minY());
   std::string northEastLng = "&northEast[lng]=" + std::to_string(rect.maxX());
@@ -3187,9 +3193,8 @@ void Framework::HandleDeviceToken(std::string const & deviceToken)
   }
 
   // Send the device token and current lot,lng to the server
-
   // Example URL - replace with your server's URL
-  std::string serverUrl = "http://192.168.0.166:3000/api/device";
+  std::string serverUrl = "https://drimsplatform.com/api/api/device";
   platform::HttpClient request(serverUrl);
   auto params = BuildPostRequest({
       {"deviceId", deviceToken},

@@ -4,6 +4,7 @@ protocol BottomTabBarInteractorProtocol: AnyObject {
   func openFaq()
   func openBookmarks()
   func openMenu()
+  func openAlerts()
 }
 
 class BottomTabBarInteractor {
@@ -31,6 +32,9 @@ extension BottomTabBarInteractor: BottomTabBarInteractorProtocol {
   
   func openHelp() {
     MapViewController.shared()?.navigationController?.pushViewController(AboutController(), animated: true)
+  }
+  func openAlerts () {
+    MapViewController.shared()?.navigationController?.pushViewController(AlertsViewController(), animated: true)
   }
   
   func openFaq() {

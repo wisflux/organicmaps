@@ -478,6 +478,14 @@ NSString *const kPP2BookmarkEditingSegue = @"PP2BookmarkEditing";
   [[MWMBookmarksManager sharedManager] addObserver:self];
   [[MWMBookmarksManager sharedManager] loadBookmarks];
   [MWMFrameworkListener addObserver:self];
+   [[FIRMessaging messaging] tokenWithCompletion:^(NSString *token, NSError *error) {
+    if (error != nil) {
+      NSLog(@"Error getting FCM registration token: %@", error);
+    } else {
+      NSLog(@"FCM registration token: %@", token);
+      GetFramework().StoreFcmToken([token UTF8String]);
+    }
+  }];
 }
 
 - (void)dealloc {
