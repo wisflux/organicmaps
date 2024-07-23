@@ -59,9 +59,6 @@
 /* Text in About screen */
 "about_proposition_2" = "• Intet batteridræn, fungerer offline";
 
-/* Text in About screen */
-"about_proposition_3" = "• Hurtig, minimalistisk, udviklet af fællesskabet";
-
 "close" = "Luk";
 
 "download" = "Download";
@@ -171,7 +168,7 @@
 
 /********** Other translations **********/
 
-"share_bookmarks_email_body" = "Hello!\n\nAttached are my bookmarks; please open them in Organic Maps. If you don't have it installed you can download it here: https://omaps.app/get?kmz\n\nEnjoy travelling with Organic Maps!";
+"share_bookmarks_email_body" = "Hello!\n\nAttached are my bookmarks; please open them in DRIMS. If you don't have it installed you can download it here: https://omaps.app/get?kmz\n\nEnjoy travelling with DRIMS!";
 
 /* message title of loading file */
 "load_kmz_title" = "Indlæser Bogmærker";
@@ -189,10 +186,10 @@
 "unknown_current_position" = "Din lokation er ikke blevet bestemt endnu";
 
 /* Subject for emailed bookmark */
-"bookmark_share_email_subject" = "Hey, tjek min knappenål på Organic Maps kortet ud!";
+"bookmark_share_email_subject" = "Hey, tjek min knappenål på DRIMS kortet ud!";
 
 /* Subject for emailed position */
-"my_position_share_email_subject" = "Hey, tjek min nuværende lokation ud på Organic Maps kortet!";
+"my_position_share_email_subject" = "Hey, tjek min nuværende lokation ud på DRIMS kortet!";
 
 /* Share button text which opens menu with more buttons, like Message, EMail, Facebook etc. */
 "share" = "Del";
@@ -210,7 +207,7 @@
 "done" = "Færdig";
 
 /* Prints version number in About dialog */
-"version" = "Organic Maps version: %@";
+"version" = "DRIMS";
 
 /* Title for tracks category in bookmarks manager */
 "tracks_title" = "Ruter";
@@ -295,7 +292,7 @@
 /* Text in menu */
 "website" = "Hjemmeside";
 
-/* Text in About menu, opens Organic Maps news website */
+/* Text in About menu, opens DRIMS news website */
 "news" = "Nyheder";
 
 /* Text in menu */
@@ -734,7 +731,7 @@
 /* Error dialog no space */
 "migration_no_space_message" = "For at opdatere app'en skal du bruge mere plads. Slet unødvendig data.";
 
-"editor_sharing_title" = "Jeg forbedrede Organic Maps kortene";
+"editor_sharing_title" = "Jeg forbedrede DRIMS kortene";
 
 /* Downloaded 10 **of** 20 <- it is that "of" */
 "downloader_of" = "%1$d af %2$d";
@@ -761,7 +758,7 @@
 
 "editor_detailed_description_hint" = "Detaljerede bemærkninger";
 
-"editor_detailed_description" = "Dine foreslåede ændringer vil blive sendt til OpenStreetMap fællesskabet. Beskrive detaljer, som ikke kan redigeres i Organic Maps.";
+"editor_detailed_description" = "Dine foreslåede ændringer vil blive sendt til OpenStreetMap fællesskabet. Beskrive detaljer, som ikke kan redigeres i DRIMS.";
 
 "editor_more_about_osm" = "Mere om OpenStreetMap";
 
@@ -792,7 +789,7 @@
 
 "location_services_disabled_on_device_4" = "4. Slå placeringstjenester til";
 
-"location_services_disabled_on_device_additional_message" = "Eller fortsæt med at bruge Organic Maps uden placering";
+"location_services_disabled_on_device_additional_message" = "Eller fortsæt med at bruge DRIMS uden placering";
 
 /* abbreviation for meters */
 "m" = "m";
@@ -823,7 +820,7 @@
 "more_on_kayak" = "Fotos, anmeldelser, booking";
 
 /* An explanation dialog shown when clicking on more_on_kayak link. */
-"dialog_kayak_disclaimer" = "Henvisningsbonussen, der modtages for hver booking via dette link, går til udviklingen af Organic Maps.";
+"dialog_kayak_disclaimer" = "Henvisningsbonussen, der modtages for hver booking via dette link, går til udviklingen af DRIMS.";
 
 /* A confirmation button text in the explanation dialog that opens hotel details page on Kayak website. */
 "dialog_kayak_button" = "Detaljer på Kayak";
@@ -883,7 +880,7 @@
 /* For sharing via SMS and so on */
 "sharing_call_action_look" = "Tjek";
 
-"recent_track_background_dialog_message" = "Organic Maps anvender din geoposition i baggrunden til at gemme din seneste rejserute.";
+"recent_track_background_dialog_message" = "DRIMS anvender din geoposition i baggrunden til at gemme din seneste rejserute.";
 
 "general_settings" = "Generelle indstillinger";
 
@@ -1055,7 +1052,7 @@
 
 "power_managment_setting_manual_max" = "Maksimum strømbesparelse";
 
-"enable_logging_warning_message" = "Indstillingen aktiverer logning til diagnostiske formål. Det kan være nyttigt for vores supportere, der fejlfinder problemer med appen. Aktiver kun denne mulighed på anmodning fra Organic Maps support.";
+"enable_logging_warning_message" = "Indstillingen aktiverer logning til diagnostiske formål. Det kan være nyttigt for vores supportere, der fejlfinder problemer med appen. Aktiver kun denne mulighed på anmodning fra DRIMS support.";
 
 "driving_options_title" = "Køre muligheder";
 
@@ -1137,7 +1134,7 @@
 
 "speedcams_alert_title_carplay_2" = "Radar advarsel";
 
-"download_map_carplay" = "Download kort i Organic Maps appen, på din enhed";
+"download_map_carplay" = "Download kort i DRIMS appen, på din enhed";
 
 "carplay_roundabout_exit" = "%@ exit";
 
@@ -1270,7 +1267,7 @@
 /* Instagram account url for the "?" About page */
 "instagram_url" = "https://www.instagram.com/organicmaps.app";
 
-/* Translated Organic Maps site, add new translations here: https://github.com/organicmaps/organicmaps.github.io/tree/master/content */
+/* Translated DRIMS site, add new translations here: https://github.com/organicmaps/organicmaps.github.io/tree/master/content */
 "translated_om_site_url" = "https://organicmaps.app/";
 
 /* Link to OSM wiki for Editor, Profile and About pages */
@@ -1307,10 +1304,10 @@
 "app_tip_09" = "Vores hovedmål er at bygge hurtige, privatlivsfokuserede, brugervenlige kort, som du vil elske.";
 
 /* Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen */
-"car_used_on_the_phone_screen" = "Du bruger nu Organic Maps på telefonens skærm.";
+"car_used_on_the_phone_screen" = "Du bruger nu DRIMS på telefonens skærm.";
 
 /* Text on the phone placeholder screen that maps are displayed on the car screen */
-"car_used_on_the_car_screen" = "Du bruger nu Organic Maps på bilens skærm.";
+"car_used_on_the_car_screen" = "Du bruger nu DRIMS på bilens skærm.";
 
 /* Displayed on the phone screen. Button to display maps on the phone screen instead of a car */
 "car_continue_on_the_phone" = "Fortsæt i telefonen";

@@ -1,12 +1,15 @@
 #import "DownloadIndicatorProtocol.h"
 #import "MWMNavigationController.h"
+#import <UserNotifications/UserNotifications.h>
+#import <FirebaseMessaging/FirebaseMessaging.h>
 
 @class MapViewController;
 @class MWMCarPlayService;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MapsAppDelegate : UIResponder<UIApplicationDelegate, DownloadIndicatorProtocol>
+@interface MapsAppDelegate : UIResponder<UIApplicationDelegate,
+UNUserNotificationCenterDelegate,DownloadIndicatorProtocol,FIRMessagingDelegate>
 {
   NSInteger m_activeDownloadsCounter;
   UIBackgroundTaskIdentifier m_backgroundTask;

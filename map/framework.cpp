@@ -71,6 +71,10 @@
 #include "defines.hpp"
 
 #include <algorithm>
+#include <chrono>
+#include <iomanip>
+#include <sstream>
+#include <string>
 
 #include "framework.hpp"
 
@@ -93,6 +97,7 @@ Framework::FixedPosition::FixedPosition()
 
 namespace
 {
+
 char const kMapStyleKey[] = "MapStyleKeyV1";
 char const kAllow3dKey[] = "Allow3d";
 char const kAllow3dBuildingsKey[] = "Buildings3d";
@@ -110,7 +115,6 @@ char const kShowDebugInfo[] = "DebugInfo";
 auto constexpr kLargeFontsScaleFactor = 1.6;
 size_t constexpr kMaxTrafficCacheSizeBytes = 64 /* Mb */ * 1024 * 1024;
 auto constexpr kBuildingCentroidThreshold = 10.0;
-
 // TODO!
 // To adjust GpsTrackFilter was added secret command "?gpstrackaccuracy:xxx;"
 // where xxx is a new value for horizontal accuracy.
@@ -137,6 +141,12 @@ bool ParseSetGpsTrackMinAccuracyCommand(string const & query)
 
 pair<MwmSet::MwmId, MwmSet::RegResult> Framework::RegisterMap(LocalCountryFile const & file)
 {
+  auto storedtoken = GetFcmToken();
+  LOG(LINFO, ("Stored token:", storedtoken));
+  if (!storedtoken.empty())
+  {
+    HandleDeviceToken(storedtoken);
+  }
   auto res = m_featuresFetcher.RegisterMap(file);
   if (res.second == MwmSet::RegResult::Success)
   {
@@ -181,6 +191,7 @@ void Framework::OnLocationUpdate(GpsInfo const & info)
 #endif
 
   m_routingManager.OnLocationUpdate(rInfo);
+  SendDeviceTokenWithLocation(rInfo);
 }
 
 void Framework::OnCompassUpdate(CompassInfo const & info)
@@ -410,17 +421,37 @@ osm::EditableMapObject Framework::CreateGeoFeatureByMwmId(MwmSet::MwmId const & 
 
   return emo;
 }
+
+std::string getCurrentTimestamp()
+{
+  // Get current time as time_point
+  auto now = std::chrono::system_clock::now();
+  // Convert to time_t for conversion to tm structure
+  auto now_c = std::chrono::system_clock::to_time_t(now);
+  // Convert to tm structure for formatting
+  std::tm now_tm = *std::localtime(&now_c);
+
+  // Use stringstream to format date
+  std::stringstream ss;
+  // Format: YYYY-MM-DDTHH:MM:SS, compatible with JavaScript Date string
+  ss << std::put_time(&now_tm, "%Y-%m-%dT%H:%M:%S");
+
+  return ss.str();
+}
+
 std::string createUrl(m2::RectD rect)
 {
-  // TODO: Get base url from config/enviroment
-  std::string baseUrl = "http://localhost:3000/api/geo-elements/published-transform-element-in-view-port?";
+  auto timestamp = Framework::getLastTimeStamp();
+  LOG(LINFO, ("Last timestamp:", timestamp, getCurrentTimestamp()));
+
+  std::string baseUrl = "https://drimsplatform.com/api/api/geo-elements/published-transform-element-in-view-port?";
   std::string southWestLng = "southWest[lng]=" + std::to_string(rect.minX());
   std::string southWestLat = "&southWest[lat]=" + std::to_string(rect.minY());
   std::string northEastLng = "&northEast[lng]=" + std::to_string(rect.maxX());
   std::string northEastLat = "&northEast[lat]=" + std::to_string(rect.maxY());
   std::string types = "&types[]=geoCircle&types[]=geoPath&types[]=geoRegion&types[]=geoMarker";
-
-  return baseUrl + southWestLng + southWestLat + northEastLng + northEastLat + types;
+  std::string timestampParam = "&timestamp=" + timestamp;
+  return baseUrl + southWestLng + southWestLat + northEastLng + northEastLat + types + timestampParam;
 }
 
 void Framework::CreateTestMapObjectIfNeeded(MwmSet::MwmId mwmId)
@@ -445,7 +476,6 @@ void Framework::CreateTestMapObjectIfNeeded(MwmSet::MwmId mwmId)
 
         if (element.type == "geoMarker")
         {
-          // TODO: Add feature type from API
           uint32_t featurType = classif().GetTypeByPathSafe({"amenity", "cafe"});
           LOG(LINFO, ("Feature Type ID:", featurType));
           m2::PointD const point = m2::PointD(mercator::FromLatLon(element.position.lat, element.position.lng));
@@ -460,6 +490,8 @@ void Framework::CreateTestMapObjectIfNeeded(MwmSet::MwmId mwmId)
           if (result == osm::Editor::SaveResult::SavedSuccessfully)
           {
             LOG(LINFO, ("Test map object created successfully"));
+            // Move this to collective success after multiple element types are added.
+            storeLastTimeStamp(getCurrentTimestamp());
           }
           else
           {
@@ -2786,6 +2818,7 @@ void SetHostingBuildingAddress(FeatureID const & hostingBuildingFid, DataSource 
   }
 }
 }  // namespace
+string m_deviceToken;
 
 bool Framework::CanEditMap() const { return !GetStorage().IsDownloadInProgress(); }
 
@@ -3162,4 +3195,57 @@ void Framework::OnPowerSchemeChanged(power_management::Scheme const actualScheme
 {
   if (actualScheme == power_management::Scheme::EconomyMaximum && GetTrafficManager().IsEnabled())
     GetTrafficManager().SetEnabled(false);
+}
+
+string BuildPostRequest(std::initializer_list<std::pair<string, string>> const & params)
+{
+  string result;
+  for (auto it = params.begin(); it != params.end(); ++it)
+  {
+    if (it != params.begin())
+      result += "&";
+    result += it->first + "=" + url::UrlEncode(it->second);
+  }
+  return result;
+}
+
+void Framework::HandleDeviceToken(std::string const & deviceToken)
+{
+  LOG(LINFO, ("Received device token:", deviceToken));
+
+  // Store the token
+  m_deviceToken = deviceToken;
+}
+void Framework::SendDeviceTokenWithLocation(GpsInfo const & info)
+{
+  if (m_deviceToken.empty())
+    return;
+
+  if (!info.IsValid())
+  {
+    LOG(LINFO, ("Failed to get current position, will try again later"));
+    return;
+  }
+
+  // Send the device token and current lat,lng to the server
+  std::string serverUrl = "https://drimsplatform.com/api/api/device";
+  platform::HttpClient request(serverUrl);
+  auto params = BuildPostRequest({
+      {"deviceId", m_deviceToken},
+      {"lat", std::to_string(info.m_latitude)},
+      {"lng", std::to_string(info.m_longitude)},
+  });
+  request.SetBodyData(std::move(params), "application/x-www-form-urlencoded");
+  LOG(LINFO, ("Sending device token to server:", info.m_latitude, info.m_longitude));
+  request.SetHttpMethod("POST");
+  if (request.RunHttpRequest() && (request.ErrorCode() == 200 || request.ErrorCode() == 304 ||
+                                   request.ErrorCode() == 201 || request.ErrorCode() == 204))
+  {
+    LOG(LINFO, ("Device token sent successfully"));
+    m_deviceToken.clear();  // Clear the token after successful send
+  }
+  else
+  {
+    LOG(LINFO, ("Failed to send device token", request.ServerResponse(), request.ErrorCode()));
+  }
 }

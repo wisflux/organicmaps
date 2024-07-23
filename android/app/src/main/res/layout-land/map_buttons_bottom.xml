@@ -22,13 +22,21 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toStartOf="@+id/btn_bookmarks"
     app:layout_constraintStart_toEndOf="@+id/help_button" />
+
   <include
     layout="@layout/map_buttons_bookmarks_square"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toStartOf="@+id/menu_button"
+    app:layout_constraintEnd_toStartOf="@+id/alerts_button"
     app:layout_constraintStart_toEndOf="@+id/btn_search" />
+  <include
+      layout="@layout/map_buttons_alerts"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toStartOf="@+id/btn_bookmarks"
+      app:layout_constraintStart_toEndOf="@+id/menu_button" />
   <include
     layout="@layout/map_buttons_menu"
     android:layout_width="wrap_content"

@@ -59,9 +59,6 @@
 /* Text in About screen */
 "about_proposition_2" = "• 배터리 소모 없음, 오프라인에서 작동";
 
-/* Text in About screen */
-"about_proposition_3" = "• 빠르고 미니멀한, 커뮤니티가 개발한";
-
 "close" = "닫기";
 
 "download" = "다운로드";

@@ -59,9 +59,6 @@
 /* Text in About screen */
 "about_proposition_2" = "• Không hao pin, hoạt động offline";
 
-/* Text in About screen */
-"about_proposition_3" = "• Nhanh chóng, tối giản, được phát triển bởi cộng đồng";
-
 "close" = "Đóng";
 
 "download" = "Tải xuống";

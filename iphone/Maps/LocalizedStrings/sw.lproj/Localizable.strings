@@ -59,9 +59,6 @@
 /* Text in About screen */
 "about_proposition_2" = "• Hakuna betri kuisha, inafanya kazi nje ya mtandao";
 
-/* Text in About screen */
-"about_proposition_3" = "• Haraka, minimalist, iliyotengenezwa na jumuiya";
-
 "close" = "Close";
 
 "download" = "Download";
@@ -992,7 +989,7 @@
 
 "bookmarks_error_title_list_name_too_long" = "Jina hili ni muda mrefu sana";
 
-"profile" = "OpenStreetMap profile";
+"profile" = "DRIMS profile";
 
 "bookmarks_detect_title" = "Faili mpya zimegunduliwa";
 

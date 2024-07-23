@@ -64,8 +64,7 @@ public class MapButtonsController extends Fragment
 
   @Nullable
   @Override
-  public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-  {
+  public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     final FragmentActivity activity = requireActivity();
     mMapButtonClickListener = (MwmActivity) activity;
     mPlacePageViewModel = new ViewModelProvider(activity).get(PlacePageViewModel.class);
@@ -83,22 +82,23 @@ public class MapButtonsController extends Fragment
     mBottomButtonsFrame = mFrame.findViewById(R.id.map_buttons_bottom);
 
     final FloatingActionButton helpButton = mFrame.findViewById(R.id.help_button);
-    if (helpButton != null)
-    {
-      if (Config.isNY() && !TextUtils.isEmpty(Config.getDonateUrl(requireContext())))
-        helpButton.setImageResource(R.drawable.ic_christmas_tree);
-      else
-        helpButton.setImageResource(R.drawable.logo);
+    if (helpButton != null) {
       // Keep this button colorful in normal theme.
       if (!ThemeUtils.isNightTheme(requireContext()))
         helpButton.getDrawable().setTintList(null);
     }
 
+    final FloatingActionButton alertsButton = mFrame.findViewById(R.id.alerts_button);
+    if (alertsButton != null) {
+      // i want to navigate to the alerts page and there is no callback from menu buttons;
+      alertsButton.setOnClickListener((v) -> mMapButtonClickListener.onMapButtonClick(MapButtons.menu));
+    }
+
     final View zoomFrame = mFrame.findViewById(R.id.zoom_buttons_container);
     mFrame.findViewById(R.id.nav_zoom_in)
-          .setOnClickListener((v) -> mMapButtonClickListener.onMapButtonClick(MapButtons.zoomIn));
+            .setOnClickListener((v) -> mMapButtonClickListener.onMapButtonClick(MapButtons.zoomIn));
     mFrame.findViewById(R.id.nav_zoom_out)
-          .setOnClickListener((v) -> mMapButtonClickListener.onMapButtonClick(MapButtons.zoomOut));
+            .setOnClickListener((v) -> mMapButtonClickListener.onMapButtonClick(MapButtons.zoomOut));
     final View bookmarksButton = mFrame.findViewById(R.id.btn_bookmarks);
     bookmarksButton.setOnClickListener((v) -> mMapButtonClickListener.onMapButtonClick(MapButtons.bookmarks));
     final View myPosition = mFrame.findViewById(R.id.my_position);
@@ -106,25 +106,28 @@ public class MapButtonsController extends Fragment
 
     // Some buttons do not exist in navigation mode
     mToggleMapLayerButton = mFrame.findViewById(R.id.layers_button);
-    if (mToggleMapLayerButton != null)
-    {
+    if (mToggleMapLayerButton != null) {
       mToggleMapLayerButton.setOnClickListener(view -> mMapButtonClickListener.onMapButtonClick(MapButtons.toggleMapLayer));
       mToggleMapLayerButton.setVisibility(View.VISIBLE);
     }
     final View menuButton = mFrame.findViewById(R.id.menu_button);
-    if (menuButton != null)
-    {
+    if (menuButton != null) {
       menuButton.setOnClickListener((v) -> mMapButtonClickListener.onMapButtonClick(MapButtons.menu));
       // This hack is needed to show the badge on the initial startup. For some reason, updateMenuBadge does not work from onResume() there.
       menuButton.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
         @Override
-        public void onGlobalLayout()
-        {
+        public void onGlobalLayout() {
           updateMenuBadge();
           menuButton.getViewTreeObserver().removeOnGlobalLayoutListener(this);
         }
       });
     }
+
+    final View alertButton = mFrame.findViewById(R.id.alerts_button);
+    if (alertButton != null) {
+      alertButton.setOnClickListener((v) -> mMapButtonClickListener.onMapButtonClick(MapButtons.alerts));
+    }
+
     if (helpButton != null)
       helpButton.setOnClickListener((v) -> mMapButtonClickListener.onMapButtonClick(MapButtons.help));
 
@@ -350,7 +353,8 @@ public class MapButtonsController extends Fragment
     search,
     bookmarks,
     menu,
-    help
+    help,
+    alerts
   }
 
   public interface MapButtonClickListener

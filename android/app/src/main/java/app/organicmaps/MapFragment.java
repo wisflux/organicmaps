@@ -19,7 +19,10 @@ import app.organicmaps.base.BaseMwmFragment;
 import app.organicmaps.display.DisplayType;
 import app.organicmaps.util.log.Logger;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MapFragment extends BaseMwmFragment implements View.OnTouchListener, SurfaceHolder.Callback
 {
@@ -107,6 +110,20 @@ public class MapFragment extends BaseMwmFragment implements View.OnTouchListener
     Bundle args = getArguments();
     if (args != null)
       launchByDeepLink = args.getBoolean(Map.ARG_LAUNCH_BY_DEEP_LINK);
+
+
+    FirebaseMessaging.getInstance().getToken()
+            .addOnCompleteListener(new OnCompleteListener<String>() {
+              @Override
+              public void onComplete(@NonNull Task<String> task) {
+                if (!task.isSuccessful()) {
+                  return;
+                }
+                String token = task.getResult();
+                PushNotificationService.nativeSendTokenToCpp(token);
+
+              }
+            });
     mMap.onCreate(launchByDeepLink);
   }
 

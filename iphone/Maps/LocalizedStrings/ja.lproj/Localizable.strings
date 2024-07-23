@@ -59,9 +59,6 @@
 /* Text in About screen */
 "about_proposition_2" = "• バッテリーの消耗がなく、オフラインで動作する";
 
-/* Text in About screen */
-"about_proposition_3" = "• 高速、ミニマリスト、コミュニティによる開発";
-
 "close" = "閉じる";
 
 "download" = "ダウンロード";

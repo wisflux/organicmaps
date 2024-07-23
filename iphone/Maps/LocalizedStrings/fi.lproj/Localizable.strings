@@ -59,9 +59,6 @@
 /* Text in About screen */
 "about_proposition_2" = "• Ei akun tyhjenemistä, toimii offline-tilassa";
 
-/* Text in About screen */
-"about_proposition_3" = "• Nopea, minimalistinen, yhteisön kehittämä";
-
 "close" = "Sulje";
 
 "download" = "Lataa";

@@ -59,9 +59,6 @@
 /* Text in About screen */
 "about_proposition_2" = "• 无需耗费电池，可离线工作";
 
-/* Text in About screen */
-"about_proposition_3" = "• 快速、简约、由社区开发";
-
 "close" = "关闭";
 
 "download" = "下载";

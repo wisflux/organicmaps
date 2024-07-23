@@ -230,7 +230,22 @@ public:
                                                  std::string const & name, uint32_t featureType, uint32_t index) const;
 
   void CreateTestMapObjectIfNeeded(MwmSet::MwmId id);
+  void HandleDeviceToken(std::string const & deviceToken);
+  static void storeLastTimeStamp(std::string const & timestamp)
+  {
+    GetPlatform().GetSecureStorage().Save("lastTimeStamp", timestamp);
+  }
 
+  static std::string getLastTimeStamp()
+  {
+    std::string timestamp;
+    GetPlatform().GetSecureStorage().Load("lastTimeStamp", timestamp);
+    return timestamp;
+  }
+
+  void SendDeviceTokenWithLocation(location::GpsInfo const & info);
+
+  void TrySendDeviceTokenWithLocation();
   df::DrapeApi & GetDrapeApi() { return m_drapeApi; }
 
   /// \returns true if there're unsaved changes in map with |countryId| and false otherwise.
@@ -395,6 +410,17 @@ public:
   void SwitchMyPositionNextMode();
   /// Should be set before Drape initialization. Guarantees that fn is called in main thread context.
   void SetMyPositionModeListener(location::TMyPositionModeChanged && fn);
+  void StoreFcmToken(std::string const & token)
+  {
+    GetPlatform().GetSecureStorage().Save("fcmToken", token);
+    LOG(LINFO, ("FCM token saved"));
+  };
+  std::string GetFcmToken()
+  {
+    std::string token;
+    GetPlatform().GetSecureStorage().Load("fcmToken", token);
+    return token;
+  };
 
   location::EMyPositionMode GetMyPositionMode() const;
 

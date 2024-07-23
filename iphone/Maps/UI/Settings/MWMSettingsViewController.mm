@@ -196,7 +196,7 @@ static NSString * const kUDDidShowICloudSynchronizationEnablingAlert = @"kUDDidS
     [strongSelf.iCloudSynchronizationCell updateWithError:error];
   }];
 
-  [self.enableLoggingCell configWithDelegate:self title:L(@"enable_logging") isOn:MWMSettings.isFileLoggingEnabled];
+  // [self.enableLoggingCell configWithDelegate:self title:L(@"enable_logging") isOn:MWMSettings.isFileLoggingEnabled];
   [self updateLogFileSize];
 }
 
@@ -391,7 +391,8 @@ static NSString * const kUDDidShowICloudSynchronizationEnablingAlert = @"kUDDidS
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
   switch (section) {
     case 1:
-      return L(@"enable_logging_warning_message");
+      // return L(@"enable_logging_warning_message");
+      return nil;
     default:
       return nil;
   }
