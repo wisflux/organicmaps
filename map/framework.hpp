@@ -232,7 +232,9 @@ public:
   void CreateTestMapObjectIfNeeded(MwmSet::MwmId id);
   void HandleDeviceToken(std::string const & deviceToken);
   void storeDeviceToken(std::string const & deviceToken);
+  void SendDeviceTokenWithLocation(location::GpsInfo const & info);
 
+  void TrySendDeviceTokenWithLocation();
   df::DrapeApi & GetDrapeApi() { return m_drapeApi; }
 
   /// \returns true if there're unsaved changes in map with |countryId| and false otherwise.

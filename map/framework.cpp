@@ -93,6 +93,7 @@ Framework::FixedPosition::FixedPosition()
 
 namespace
 {
+
 char const kMapStyleKey[] = "MapStyleKeyV1";
 char const kAllow3dKey[] = "Allow3d";
 char const kAllow3dBuildingsKey[] = "Buildings3d";
@@ -110,7 +111,6 @@ char const kShowDebugInfo[] = "DebugInfo";
 auto constexpr kLargeFontsScaleFactor = 1.6;
 size_t constexpr kMaxTrafficCacheSizeBytes = 64 /* Mb */ * 1024 * 1024;
 auto constexpr kBuildingCentroidThreshold = 10.0;
-
 // TODO!
 // To adjust GpsTrackFilter was added secret command "?gpstrackaccuracy:xxx;"
 // where xxx is a new value for horizontal accuracy.
@@ -187,6 +187,7 @@ void Framework::OnLocationUpdate(GpsInfo const & info)
 #endif
 
   m_routingManager.OnLocationUpdate(rInfo);
+  SendDeviceTokenWithLocation(rInfo);
 }
 
 void Framework::OnCompassUpdate(CompassInfo const & info)
@@ -2792,6 +2793,7 @@ void SetHostingBuildingAddress(FeatureID const & hostingBuildingFid, DataSource 
   }
 }
 }  // namespace
+string m_deviceToken;
 
 bool Framework::CanEditMap() const { return !GetStorage().IsDownloadInProgress(); }
 
@@ -3185,30 +3187,40 @@ string BuildPostRequest(std::initializer_list<std::pair<string, string>> const &
 void Framework::HandleDeviceToken(std::string const & deviceToken)
 {
   LOG(LINFO, ("Received device token:", deviceToken));
-  auto points = GetCurrentPosition();
-  if (!points)
+
+  // Store the token
+  m_deviceToken = deviceToken;
+}
+void Framework::SendDeviceTokenWithLocation(GpsInfo const & info)
+{
+  if (m_deviceToken.empty())
+    return;
+
+  if (!info.IsValid())
   {
-    LOG(LINFO, ("Failed to get current position"));
+    LOG(LINFO, ("Failed to get current position, will try again later"));
     return;
   }
 
-  // Send the device token and current lot,lng to the server
-  // Example URL - replace with your server's URL
+  // Send the device token and current lat,lng to the server
   std::string serverUrl = "https://drimsplatform.com/api/api/device";
   platform::HttpClient request(serverUrl);
   auto params = BuildPostRequest({
-      {"deviceId", deviceToken},
-      {"lat", std::to_string(points->y)},
-      {"lng", std::to_string(points->x)},
+      {"deviceId", m_deviceToken},
+      {"lat", std::to_string(info.m_latitude)},
+      {"lng", std::to_string(info.m_longitude)},
   });
-  request.SetBodyData(params, "application/x-www-form-urlencoded");
+  request.SetBodyData(std::move(params), "application/x-www-form-urlencoded");
+  LOG(LINFO, ("Sending device token to server:", info.m_latitude, info.m_longitude));
   request.SetHttpMethod("POST");
-  if (request.RunHttpRequest() && (request.ErrorCode() == 200 || request.ErrorCode() == 304))
+  if (request.RunHttpRequest() && (request.ErrorCode() == 200 || request.ErrorCode() == 304 ||
+                                   request.ErrorCode() == 201 || request.ErrorCode() == 204))
   {
     LOG(LINFO, ("Device token sent successfully"));
+    m_deviceToken.clear();  // Clear the token after successful send
   }
   else
   {
-    LOG(LINFO, ("Failed to send device token"));
+    LOG(LINFO, ("Failed to send device token", request.ServerResponse(), request.ErrorCode()));
   }
 }
