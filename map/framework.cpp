@@ -71,6 +71,10 @@
 #include "defines.hpp"
 
 #include <algorithm>
+#include <chrono>
+#include <iomanip>
+#include <sstream>
+#include <string>
 
 #include "framework.hpp"
 
@@ -417,17 +421,37 @@ osm::EditableMapObject Framework::CreateGeoFeatureByMwmId(MwmSet::MwmId const & 
 
   return emo;
 }
+
+std::string getCurrentTimestamp()
+{
+  // Get current time as time_point
+  auto now = std::chrono::system_clock::now();
+  // Convert to time_t for conversion to tm structure
+  auto now_c = std::chrono::system_clock::to_time_t(now);
+  // Convert to tm structure for formatting
+  std::tm now_tm = *std::localtime(&now_c);
+
+  // Use stringstream to format date
+  std::stringstream ss;
+  // Format: YYYY-MM-DDTHH:MM:SS, compatible with JavaScript Date string
+  ss << std::put_time(&now_tm, "%Y-%m-%dT%H:%M:%S");
+
+  return ss.str();
+}
+
 std::string createUrl(m2::RectD rect)
 {
-  // TODO: Get base url from config/enviroment
+  auto timestamp = Framework::getLastTimeStamp();
+  LOG(LINFO, ("Last timestamp:", timestamp, getCurrentTimestamp()));
+
   std::string baseUrl = "https://drimsplatform.com/api/api/geo-elements/published-transform-element-in-view-port?";
   std::string southWestLng = "southWest[lng]=" + std::to_string(rect.minX());
   std::string southWestLat = "&southWest[lat]=" + std::to_string(rect.minY());
   std::string northEastLng = "&northEast[lng]=" + std::to_string(rect.maxX());
   std::string northEastLat = "&northEast[lat]=" + std::to_string(rect.maxY());
   std::string types = "&types[]=geoCircle&types[]=geoPath&types[]=geoRegion&types[]=geoMarker";
-
-  return baseUrl + southWestLng + southWestLat + northEastLng + northEastLat + types;
+  std::string timestampParam = "&timestamp=" + timestamp;
+  return baseUrl + southWestLng + southWestLat + northEastLng + northEastLat + types + timestampParam;
 }
 
 void Framework::CreateTestMapObjectIfNeeded(MwmSet::MwmId mwmId)
@@ -452,7 +476,6 @@ void Framework::CreateTestMapObjectIfNeeded(MwmSet::MwmId mwmId)
 
         if (element.type == "geoMarker")
         {
-          // TODO: Add feature type from API
           uint32_t featurType = classif().GetTypeByPathSafe({"amenity", "cafe"});
           LOG(LINFO, ("Feature Type ID:", featurType));
           m2::PointD const point = m2::PointD(mercator::FromLatLon(element.position.lat, element.position.lng));
@@ -467,6 +490,8 @@ void Framework::CreateTestMapObjectIfNeeded(MwmSet::MwmId mwmId)
           if (result == osm::Editor::SaveResult::SavedSuccessfully)
           {
             LOG(LINFO, ("Test map object created successfully"));
+            // Move this to collective success after multiple element types are added.
+            storeLastTimeStamp(getCurrentTimestamp());
           }
           else
           {

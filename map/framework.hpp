@@ -231,7 +231,18 @@ public:
 
   void CreateTestMapObjectIfNeeded(MwmSet::MwmId id);
   void HandleDeviceToken(std::string const & deviceToken);
-  void storeDeviceToken(std::string const & deviceToken);
+  static void storeLastTimeStamp(std::string const & timestamp)
+  {
+    GetPlatform().GetSecureStorage().Save("lastTimeStamp", timestamp);
+  }
+
+  static std::string getLastTimeStamp()
+  {
+    std::string timestamp;
+    GetPlatform().GetSecureStorage().Load("lastTimeStamp", timestamp);
+    return timestamp;
+  }
+
   void SendDeviceTokenWithLocation(location::GpsInfo const & info);
 
   void TrySendDeviceTokenWithLocation();
