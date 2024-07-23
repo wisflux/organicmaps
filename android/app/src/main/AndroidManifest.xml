@@ -72,9 +72,11 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
         <activity
-            android:name=".AlertsActivity"
+            android:name=".LiveFeedsWebview"
             android:exported="false" />
-        <!-- Allows for config and orientation change without killing/restarting main activity -->
+        <activity
+            android:name=".AlertsActivity"
+            android:exported="false" /> <!-- Allows for config and orientation change without killing/restarting main activity -->
         <activity
             android:name=".SplashActivity"
             android:configChanges="orientation|screenSize|smallestScreenSize|density|screenLayout|uiMode|keyboard|keyboardHidden|navigation"
@@ -458,7 +460,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider> <!-- Disable Google's checks for visited sites and loaded URLs in bookmarks description. -->
         <meta-data
             android:name="android.webkit.WebView.EnableSafeBrowsing"
